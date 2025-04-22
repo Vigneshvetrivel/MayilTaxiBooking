@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Submit to Google Sheets</title>
+</head>
+<body>
+  <h2>Contact Form</h2>
+  <form id="contact-form">
+    <label>Name: <input type="text" name="name" required /></label><br/>
+    <label>Email: <input type="email" name="email" required /></label><br/>
+    <label>Message: <textarea name="message" required></textarea></label><br/>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById('contact-form');
+    const responseMsg = document.getElementById('response');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = {
+        name: form.name.value,
+        email: form.email.value,
+        message: form.message.value
+      };
+
+      fetch('https://script.google.com/macros/s/AKfycbxlndnHG5ONhNstTzNlVoBdGLL8Wo9yJWbbRuGvlWmthDhRV_YkfZgdxjIgLXQtZDBL/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        responseMsg.textContent = "Submitted successfully!";
+        form.reset();
+      })
+      .catch(err => {
+        responseMsg.textContent = "Submission failed.";
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
