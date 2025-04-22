@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Submit to Google Sheets</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
 </head>
 <body>
-  <h2>Contact Form</h2>
-  <form id="contact-form">
-    <label>Name: <input type="text" name="name" required /></label><br/>
-    <label>Email: <input type="email" name="email" required /></label><br/>
-    <label>Message: <textarea name="message" required></textarea></label><br/>
-    <button type="submit">Submit</button>
-  </form>
+    <h2>Contact Form</h2>
+    <form id="contactForm">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
 
-  <p id="response"></p>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
 
-  <script>
-    const form = document.getElementById('contact-form');
-    const responseMsg = document.getElementById('response');
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" required></textarea><br><br>
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+        <button type="submit">Submit</button>
+    </form>
 
-      const formData = {
-        name: form.name.value,
-        email: form.email.value,
-        message: form.message.value
-      };
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
 
-      fetch('https://script.google.com/macros/s/AKfycbxfE1NhV6C8QNDN8pKmICMGwBcRABsd9W94tAVh3sqKySmJCMl0u5Jyu1nyQAiJFavw/exec', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        responseMsg.textContent = "Submitted successfully!";
-        form.reset();
-      })
-      .catch(err => {
-        responseMsg.textContent = "Submission failed.";
-        console.error(err);
-      });
-    });
-  </script>
+            const formData = {
+                name: name,
+                email: email,
+                message: message
+            };
+
+            fetch('https://script.google.com/macros/s/AKfycbzbbg4pMTO8IGChFLFEYiv4zdEnGQsC__vBftMVL1eAU4e6tDjsquGEsv1ZfTX-NGCm/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Form submitted successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error submitting form!');
+            });
+        });
+    </script>
 </body>
 </html>
