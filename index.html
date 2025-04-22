@@ -877,25 +877,25 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Form Handling with Google Sheets -->
+    
    document.getElementById('taxiBookingForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Show loading spinner
+   
     document.getElementById('loading-spinner').style.display = 'block';
     
-    // Get form data
+  
     const formData = new FormData(this);
     const formDataObj = {};
     formData.forEach((value, key) => {
         formDataObj[key] = value;
     });
     
-    // Add timestamp
+  
     formDataObj.timestamp = new Date().toISOString();
     
-    // Replace YOUR_ACTUAL_SCRIPT_ID with the ID from your deployment URL
-    fetch('https://script.google.com/macros/s/YOUR_ACTUAL_SCRIPT_ID/exec', {
+    
+    fetch('https://script.google.com/macros/s/AKfycbzo8xvmcs0vuQ8h95l05INl8HSDcUmLQn-4rgvQg_oHaPLpPdNHKctZHkI2H1Au6jfASA/exec', {
         method: 'POST',
         body: JSON.stringify(formDataObj),
         headers: {
