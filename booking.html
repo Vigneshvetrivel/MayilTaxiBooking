@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mayil Travels Booking</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script type="module" src="booking.js"></script>
+</head>
+<body>
+  <div class="header">
+    <h1>Mayil Travels</h1>
+    <p>Safe, Reliable and Comfortable Travel Services</p>
+  </div>
+
+  <div class="company-info">
+    <div class="contact-info">
+      <div class="contact-item">
+        <i class="fas fa-phone"></i>
+        <span>Call/WhatsApp: <a href="tel:9488840240">9488840240</a></span>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>5A KRISHNA SWAMINAGAR, CHINNAMAL LAYOUT, KK PUDUR, COIMBATORE 38</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <h2>Book Your Ride</h2>
+
+    <form id="bookingForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name" class="required-field">Full Name</label>
+          <input type="text" id="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="required-field">Email Address</label>
+          <input type="email" id="email" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone" class="required-field">Phone Number</label>
+        <input type="tel" id="phone" required>
+      </div>
+
+      <div class="form-group">
+        <label for="pickup" class="required-field">Pickup Location</label>
+        <input type="text" id="pickup" required>
+      </div>
+
+      <div class="form-group">
+        <label for="drop" class="required-field">Drop Location</label>
+        <input type="text" id="drop" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="date" class="required-field">Pickup Date</label>
+          <input type="date" id="date" required>
+        </div>
+
+        <div class="form-group">
+          <label for="time" class="required-field">Pickup Time</label>
+          <input type="time" id="time" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="vehicleType" class="required-field">Vehicle Type</label>
+        <div class="vehicle-options">
+          <div class="vehicle-option" data-value="4+1">4+1 Sedan</div>
+          <div class="vehicle-option" data-value="6+1">6+1 SUV</div>
+          <div class="vehicle-option" data-value="7+1">7+1 Minivan</div>
+          <div class="vehicle-option" data-value="12+1">12+1 Tempo</div>
+          <div class="vehicle-option" data-value="14+1">14+1 Minibus</div>
+          <div class="vehicle-option" data-value="16+1">16+1 Minibus</div>
+          <div class="vehicle-option" data-value="18+1">18+1 Minibus</div>
+        </div>
+        <input type="hidden" id="vehicleType" required>
+      </div>
+
+      <div class="form-group">
+        <label for="passengers" class="required-field">Number of Passengers</label>
+        <select id="passengers" required>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="specialNotes">Special Notes (Optional)</label>
+        <textarea id="specialNotes" rows="3" placeholder="Any special requirements or information..."></textarea>
+      </div>
+
+      <button type="submit">Book Now</button>
+    </form>
+
+    <div id="successMessage" class="success-message">
+      Your booking has been submitted successfully! We'll contact you shortly to confirm.
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module" src="booking.js"></script>
+</body>
+</html>
