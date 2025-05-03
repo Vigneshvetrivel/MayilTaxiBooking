@@ -1,1 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MayilTaxi & Travels Booking Form</title>
+  <base target="_top">
+ 
 
+</head>
+<style>
+:root {
+  --primary-color: #1db99e;
+  --secondary-color: #4285f4;
+  --text-color: #333;
+  --light-gray: #f5f5f5;
+  --medium-gray: #ddd;
+  --white: #fff;
+  --box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+} /* <-- Missing closing brace added here */
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--light-gray);
+}
+
+/* Header */
+header {
+  background-color: var(--white);
+  box-shadow: var(--box-shadow);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo img {
+  height: 60px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+}
+
+.logo-slogan {
+  font-size: 14px;
+  color: var(--primary-color);
+  font-style: italic;
+}
+
+.contact-info {
+  display: flex;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.contact-item:hover {
+  color: var(--primary-color);
+}
+
+.contact-item i {
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+/* Main Content */
+main {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.hero {
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/api/placeholder/1200/400');
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.hero-content h1 {
+  font-size: 36px;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-content p {
+  font-size: 18px;
+  max-width: 600px;
+  margin: 0 auto;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.container {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+h1 {
+  text-align: center;
+  color: var(--secondary-color);
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--medium-gray);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.time-select {
+  display: flex;
+  gap: 10px;
+}
+
+.time-select select {
+  flex: 1;
+}
+
+.time-select .ampm {
+  width: 80px;
+}
+
+.trip-type-selection {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.trip-type {
+  flex: 1;
+  padding: 15px;
+  border: 2px solid var(--medium-gray);
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.trip-type.active {
+  border-color: var(--primary-color);
+  background-color: rgba(29, 185, 158, 0.1);
+}
+
+.trip-type h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  color: var(--primary-color);
+  font-size: 18px;
+}
+
+.trip-type p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.submit-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #189e86;
+}
+
+.required::after {
+  content: " *";
+  color: red;
+}
+
+.success-message {
+  display: none;
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.error-message {
+  display: none;
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.loading {
+  display: none;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.round-trip-details {
+  border: 1px solid var(--medium-gray);
+  padding: 20px;
+  border-radius: 4px;
+  margin-top: 15px;
+  background-color: #fafafa;
+}
+
+.company-info {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.company-info h2 {
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.company-info p {
+  margin: 5px 0;
+}
+
+/* Footer */
+footer {
+  background-color: #333;
+  color: var(--white);
+  padding: 30px 0;
+  margin-top: 50px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.footer-section h3 {
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  font-size: 18px;
+}
+
+.footer-section p {
+  margin-bottom: 10px;
+}
+
+.footer-section a {
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-section a:hover {
+  color: var(--primary-color);
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.social-links a {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.social-links a:hover {
+  background-color: var(--primary-color);
+}
+
+.copyright {
+  text-align: center;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .trip-type-selection {
+    flex-direction: column;
+  }
+
+  .hero {
+    height: 200px;
+  }
+}
+.book-now-container {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.book-now-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 16px 40px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  transition: background 0.3s;
+}
+
+.book-now-btn:hover {
+  background-color: #3367d6;
+}
+
+</style>
+<body>
+  <div class="page-content">
+    <div class="container">
+      <div class="company-info">
+        <h2>Mayil Taxi</h2>
+        <p>Phone: 9488840240 (Call & WhatsApp)</p>
+        <p>Email: MayilTaxi@gmail.com</p>
+        <p>Address: 5A KRISHNA SWAMINAGAR CHINNAMAL LAYOUT KK PUDUR COIMBATORE 38</p>
+      </div>
+      
+      <h1>Travel Booking</h1>
+      
+      <!-- Trip Type Selection -->
+      <div class="trip-type-selection">
+        <div class="trip-type active" id="dropTrip" onclick="switchTripType('drop')">
+          <h3>Drop Trip</h3>
+          <p>One-way journey</p>
+        </div>
+        <div class="trip-type" id="roundTrip" onclick="switchTripType('round')">
+          <h3>Round Trip</h3>
+          <p>Two-way journey</p>
+        </div>
+        <div class="trip-type" id="packageTrip" onclick="switchTripType('package')">
+          <h3>Package</h3>
+          <p>Multi-day journey</p>
+        </div>
+      </div>
+      
+      <!-- Book Now Button - MADE BIGGER AND MORE PROMINENT -->
+      <div class="book-now-container">
+        <button class="book-now-btn" id="bookNowBtn">BOOK NOW</button>
+      </div>
+      
+      <!-- Booking Form Container (Hidden Initially) -->
+      <div id="bookingFormContainer" style="display:none;">
+        <div id="successMessage" class="success-message">
+          Your booking has been submitted successfully! We will contact you shortly.
+        </div>
+        
+        <div id="errorMessage" class="error-message">
+          There was an error submitting your booking. Please try again.
+        </div>
+        
+        <form id="bookingForm">
+          <!-- Customer Information -->
+          <div class="form-group">
+            <label for="customerName" class="required">Customer Name</label>
+            <input type="text" id="customerName" name="customerName" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="customerEmail" class="required">Email Address</label>
+            <input type="email" id="customerEmail" name="customerEmail" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="customerPhone" class="required">Phone Number</label>
+            <input type="tel" id="customerPhone" name="customerPhone" required>
+          </div>
+          
+          <!-- Common Fields -->
+          <div class="form-group">
+            <label for="travelDate" class="required">Travel Date</label>
+            <input type="date" id="travelDate" name="travelDate" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="travelTime" class="required">Travel Time</label>
+            <input type="time" id="travelTime" name="travelTime" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="pickupLocation" class="required">Pickup Location</label>
+            <input type="text" id="pickupLocation" name="pickupLocation" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="dropLocation" class="required">Drop Location</label>
+            <input type="text" id="dropLocation" name="dropLocation" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="vehicleType" class="required">Vehicle Type</label>
+          <select id="vehicleType" name="vehicleType" required>
+  <option value="">-- Select Vehicle --</option>
+   <option value="Sedan">Hatchback</option>
+  <option value="Sedan">Sedan</option>
+  <option value="SUV">SUV</option>
+  <option value="Innova">Innova</option>
+  <!-- etc -->
+</select>
+
+          </div>
+          
+          <!-- Drop Trip Fields (default active) -->
+          <div id="dropTripFields" class="tab-content active">
+            <!-- Any drop trip specific fields would go here -->
+          </div>
+          
+          <!-- Round Trip Fields -->
+          <div id="roundTripFields" class="tab-content">
+            <div class="round-trip-details">
+              <div class="form-group">
+                <label for="returnDate" class="required">Return Date</label>
+                <input type="date" id="returnDate" name="returnDate">
+              </div>
+              
+              <div class="form-group">
+                <label for="numberOfDays" class="required">Number of Days</label>
+                <input type="number" id="numberOfDays" name="numberOfDays" min="1">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Package Trip Fields -->
+          <div id="packageTripFields" class="tab-content">
+            <div class="round-trip-details">
+              <div class="form-group">
+                <label for="returnDatePackage" class="required">Return Date</label>
+                <input type="date" id="returnDatePackage" name="returnDatePackage">
+              </div>
+              
+              <div class="form-group">
+                <label for="numberOfDaysPackage" class="required">Number of Days</label>
+                <input type="number" id="numberOfDaysPackage" name="numberOfDaysPackage" min="1">
+              </div>
+              
+              <div class="form-group">
+                <label for="packageType">Package Type</label>
+                <select id="packageType" name="packageType">
+                  <option value="">Select a package</option>
+                  <option value="hillstation">Hill Station</option>
+                  <option value="pilgrimage">Pilgrimage</option>
+                  <option value="tourism">Tourism</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="additionalInfo">Additional Requirements</label>
+            <textarea id="additionalInfo" name="additionalInfo" rows="3"></textarea>
+          </div>
+          
+          <div class="loading" id="loadingIndicator">
+            <p>Submitting your booking...</p>
+          </div>
+          
+          <div class="buttons">
+            <button type="submit" class="submit-btn">Submit Booking</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>About Mayil Taxi</h3>
+        <p>Mayil Taxi provides comfortable and reliable taxi services in Coimbatore and across Tamil Nadu. We specialize in both one-way drop and multi-day round trip services.</p>
+      </div>
+
+      <div class="footer-section">
+        <h3>Contact Us</h3>
+        <p>Phone: 9488840240</p>
+        <p>Email: MayilTaxi@gmail.com</p>
+        <p>Address: 5A KRISHNA SWAMINAGAR CHINNAMAL LAYOUT KK PUDUR COIMBATORE 38</p>
+      </div>
+
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <p><a href="#">Home</a></p>
+        <p><a href="#">Services</a></p>
+        <p><a href="#">Book Now</a></p>
+        <p><a href="#">Contact</a></p>
+      </div>
+
+      <div class="footer-section">
+        <h3>Connect With Us</h3>
+        <p>Follow us on social media for updates and promotions</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/9488840240"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="copyright">
+      <p>&copy; 2025 Mayil Taxi. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+
+
+</body>
+  <script>
+
+  document.getElementById("bookNowBtn").addEventListener("click", function () {
+    document.getElementById("bookingFormContainer").style.display = "block";
+    this.style.display = "none"; // Hide the "BOOK NOW" button after it's clicked
+    window.scrollTo({
+      top: document.getElementById("bookingFormContainer").offsetTop,
+      behavior: 'smooth'
+    });
+  });
+
+function switchTripType(type) {
+    document.querySelectorAll('.trip-type').forEach(el => el.classList.remove('active'));
+    document.getElementById(type + 'Trip').classList.add('active');
+
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    const activeTab = document.getElementById(type + 'Content');
+    if (activeTab) activeTab.classList.add('active');
+  }
+
+  document.getElementById("bookNowBtn").onclick = () => {
+    document.getElementById("bookingFormContainer").style.display = "block";
+    document.getElementById("bookNowBtn").style.display = "none";
+  };
+
+    // Setup trip type as a global variable to track selected trip type
+    let currentTripType = 'drop';
+    
+    // Switch between trip types
+    function switchTripType(type) {
+      currentTripType = type;
+      
+      // Update active class on trip type buttons
+      document.getElementById('dropTrip').classList.remove('active');
+      document.getElementById('roundTrip').classList.remove('active');
+      document.getElementById('packageTrip').classList.remove('active');
+      
+      // Activate selected type
+      if (type === 'drop') {
+        document.getElementById('dropTrip').classList.add('active');
+      } else if (type === 'round') {
+        document.getElementById('roundTrip').classList.add('active');
+      } else if (type === 'package') {
+        document.getElementById('packageTrip').classList.add('active');
+      }
+      
+      // Update form fields based on selected trip type
+      updateFormFields();
+    }
+    
+    // Function to update form fields based on trip type
+    function updateFormFields() {
+      // Check if the form is visible
+      const formContainer = document.getElementById('bookingFormContainer');
+      
+      if (formContainer.style.display === 'block') {
+        // Hide all fields first
+        document.getElementById('dropTripFields').classList.remove('active');
+        document.getElementById('roundTripFields').classList.remove('active');
+        document.getElementById('packageTripFields').classList.remove('active');
+        
+        // Make all special fields not required
+        document.getElementById('returnDate').removeAttribute('required');
+        document.getElementById('numberOfDays').removeAttribute('required');
+        document.getElementById('returnDatePackage').removeAttribute('required');
+        document.getElementById('numberOfDaysPackage').removeAttribute('required');
+        
+        // Show and set required fields based on trip type
+        if (currentTripType === 'drop') {
+          document.getElementById('dropTripFields').classList.add('active');
+        } else if (currentTripType === 'round') {
+          document.getElementById('roundTripFields').classList.add('active');
+          document.getElementById('returnDate').setAttribute('required', 'required');
+          document.getElementById('numberOfDays').setAttribute('required', 'required');
+        } else if (currentTripType === 'package') {
+          document.getElementById('packageTripFields').classList.add('active');
+          document.getElementById('returnDatePackage').setAttribute('required', 'required');
+          document.getElementById('numberOfDaysPackage').setAttribute('required', 'required');
+        }
+      }
+    }
+    
+    // Toggle booking form visibility
+    document.getElementById('bookNowBtn').addEventListener('click', function() {
+      const formContainer = document.getElementById('bookingFormContainer');
+      formContainer.style.display = 'block';
+      this.style.display = 'none'; // Hide the Book Now button
+      
+      // Update form fields based on selected trip type
+      updateFormFields();
+      
+      // Scroll to form container
+      formContainer.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Calculate days between dates for Round Trip
+    function calculateDays() {
+      const startDate = new Date(document.getElementById('travelDate').value);
+      const endDate = new Date(document.getElementById('returnDate').value);
+      
+      if (startDate && endDate) {
+        const timeDiff = endDate - startDate;
+        const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // Include both start and end days
+        
+        if (daysDiff > 0) {
+          document.getElementById('numberOfDays').value = daysDiff;
+        }
+      }
+    }
+    
+    // Calculate days between dates for Package Trip
+    function calculateDaysPackage() {
+      const startDate = new Date(document.getElementById('travelDate').value);
+      const endDate = new Date(document.getElementById('returnDatePackage').value);
+      
+      if (startDate && endDate) {
+        const timeDiff = endDate - startDate;
+        const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // Include both start and end days
+        
+        if (daysDiff > 0) {
+          document.getElementById('numberOfDaysPackage').value = daysDiff;
+        }
+      }
+    }
+    
+    // Format time to 12-hour format for display
+    function format12HourTime(timeString) {
+      if (!timeString) return '';
+      
+      const [hours, minutes] = timeString.split(':');
+      let period = 'AM';
+      let hour = parseInt(hours, 10);
+      
+      if (hour >= 12) {
+        period = 'PM';
+        if (hour > 12) {
+          hour -= 12;
+        }
+      }
+      if (hour === 0) {
+        hour = 12;
+      }
+      
+      return `${hour}:${minutes} ${period}`;
+    }
+    
+    // Add event listeners to calculate days automatically
+    document.getElementById('travelDate').addEventListener('change', function() {
+      calculateDays();
+      calculateDaysPackage();
+    });
+    document.getElementById('returnDate').addEventListener('change', calculateDays);
+    document.getElementById('returnDatePackage').addEventListener('change', calculateDaysPackage);
+    
+    // Form submission
+    document.getElementById('bookingForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      // Show loading indicator
+      document.getElementById('loadingIndicator').style.display = 'block';
+      
+      // Hide any previous messages
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('errorMessage').style.display = 'none';
+      
+      // Get form data
+      const formData = new FormData(this);
+      let tripType = 'Drop Trip';
+      
+      if (currentTripType === 'round') {
+        tripType = 'Round Trip';
+      } else if (currentTripType === 'package') {
+        tripType = 'Package Trip';
+      }
+      
+      // Get time value in 12-hour format
+      const timeValue = formData.get('travelTime');
+      const formattedTime = format12HourTime(timeValue);
+      
+      // Create data object
+      const bookingData = {
+        tripType: tripType,
+        customerName: formData.get('customerName'),
+        customerEmail: formData.get('customerEmail'),
+        customerPhone: formData.get('customerPhone'),
+        travelDate: formData.get('travelDate'),
+        travelTime: timeValue, // Original time value - conversion happens server-side
+        formattedTime: formattedTime, // 12-hour formatted time for display
+        pickupLocation: formData.get('pickupLocation'),
+        dropLocation: formData.get('dropLocation'),
+        vehicleType: formData.get('vehicleType'),
+        additionalInfo: formData.get('additionalInfo') || ''
+      };
+      
+      // Add trip-specific data
+      if (currentTripType === 'round') {
+        bookingData.returnDate = formData.get('returnDate') || '';
+        bookingData.numberOfDays = formData.get('numberOfDays') || '';
+      } else if (currentTripType === 'package') {
+        bookingData.returnDate = formData.get('returnDatePackage') || '';
+        bookingData.numberOfDays = formData.get('numberOfDaysPackage') || '';
+        bookingData.packageType = formData.get('packageType') || '';
+      }
+      
+      // Submit data to Google Apps Script
+      try {
+        // For demonstration, we'll simulate success
+        // In production, this would be:
+        // google.script.run
+        //   .withSuccessHandler(handleSuccess)
+        //   .withFailureHandler(handleError)
+        //   .processBookingForm(bookingData);
+        
+        // Simulate successful submission after 1.5 seconds
+        setTimeout(function() {
+          handleSuccess({ bookingId: 'BK' + Math.floor(Math.random() * 10000) });
+        }, 1500);
+      } catch (error) {
+        handleError("Unable to process your booking. Please try again.");
+      }
+    });
+    
+    function handleSuccess(response) {
+      // Hide loading indicator
+      document.getElementById('loadingIndicator').style.display = 'none';
+      
+      // Show success message with booking ID if available
+      let successMessage = 'Your booking has been submitted successfully! We will contact you shortly.';
+      if (response && response.bookingId) {
+        successMessage += '<br>Your Booking ID is: <strong>' + response.bookingId + '</strong>';
+      }
+      
+      document.getElementById('successMessage').innerHTML = successMessage;
+      document.getElementById('successMessage').style.display = 'block';
+      
+      // Reset form
+      document.getElementById('bookingForm').reset();
+      
+      // Scroll to success message
+      document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function handleError(error) {
+      // Hide loading indicator
+      document.getElementById('loadingIndicator').style.display = 'none';
+      
+      // Show error message
+      document.getElementById('errorMessage').innerHTML = 'Error: ' + error;
+      document.getElementById('errorMessage').style.display = 'block';
+      
+      // Scroll to error message
+      document.getElementById('errorMessage').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</html>
