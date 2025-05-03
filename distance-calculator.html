@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Mayil Taxi and Travels - Booking Form</title>
     <meta charset="UTF-8">
@@ -39,7 +39,7 @@
         input[type="text"],
         input[type="email"],
         input[type="tel"],
-        input[type="date"],
+        input[type="datetime-local"],
         select,
         textarea {
             width: 100%;
@@ -151,183 +151,63 @@
         .header-text {
             flex-grow: 1;
         }
+        .trip-type {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .trip-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .trip-option.selected {
+            border-color: #3498db;
+            background-color: #ebf5fb;
+            font-weight: 600;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .success-message {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .error-message {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .booking-reference {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a5276;
+            margin-top: 10px;
+        }
     </style>
-    <script>
-        // Global variables
-        let autocompletePickup;
-        let autocompleteDrop;
-        let directionsService;
-        let map;
-        let distanceInKm = 0;
-
-        // Initialize Google Maps services
-        function initMap() {
-            // Create map instance (required for the API even if not displayed)
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 0, lng: 0},
-                zoom: 2,
-                disableDefaultUI: true
-            });
-
-            // Initialize the Google Places Autocomplete
-            autocompletePickup = new google.maps.places.Autocomplete(
-                document.getElementById('pickup'),
-                {types: ['geocode']}
-            );
-
-            autocompleteDrop = new google.maps.places.Autocomplete(
-                document.getElementById('dropoff'),
-                {types: ['geocode']}
-            );
-
-            // Initialize the Directions Service
-            directionsService = new google.maps.DirectionsService();
-
-            // Add event listeners
-            document.getElementById('calculate').addEventListener('click', calculateFare);
-            document.getElementById('bookingForm').addEventListener('submit', submitBooking);
-
-            // Add event listeners to vehicle options
-            const vehicleOptions = document.querySelectorAll('.vehicle-option');
-            vehicleOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    // Remove selected class from all options
-                    vehicleOptions.forEach(opt => opt.classList.remove('selected'));
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-                    // Check the radio button
-                    const radio = this.querySelector('input[type="radio"]');
-                    radio.checked = true;
-
-                    // Recalculate fare if distance is available
-                    if (distanceInKm > 0) {
-                        calculateFare();
-                    }
-                });
-            });
-        }
-
-        // Calculate fare based on vehicle type and distance
-        function calculateFare() {
-            const pickup = document.getElementById('pickup').value;
-            const dropoff = document.getElementById('dropoff').value;
-
-            if (!pickup || !dropoff) {
-                alert('Please enter both pickup and drop locations');
-                return;
-            }
-
-            const request = {
-                origin: pickup,
-                destination: dropoff,
-                travelMode: google.maps.TravelMode.DRIVING
-            };
-
-            directionsService.route(request, function(response, status) {
-                if (status === 'OK') {
-                    // Get the route
-                    const route = response.routes[0];
-
-                    // Extract distance information
-                    distanceInKm = route.legs[0].distance.value / 1000;
-                    const durationMin = route.legs[0].duration.value / 60;
-
-                    // Get selected vehicle type
-                    const vehicleType = document.querySelector('input[name="vehicleType"]:checked').value;
-
-                    // Calculate fare based on vehicle type
-                    let ratePerKm = 0;
-                    switch(vehicleType) {
-                        case 'hatchback':
-                            ratePerKm = 13;
-                            break;
-                        case 'sedan':
-                            ratePerKm = 14;
-                            break;
-                        case 'ertiga':
-                            ratePerKm = 18;
-                            break;
-                        case 'crysta':
-                            ratePerKm = 20;
-                            break;
-                    }
-
-                    const estimatedFare = distanceInKm * ratePerKm;
-
-                    // Display results
-                    document.getElementById('distanceResult').textContent = distanceInKm.toFixed(2) + ' km';
-                    document.getElementById('durationResult').textContent = durationMin.toFixed(0) + ' minutes';
-                    document.getElementById('fareEstimation').textContent = '₹' + estimatedFare.toFixed(2);
-                    document.getElementById('results').style.display = 'block';
-
-                    // Store for form submission
-                    document.getElementById('distanceKm').value = distanceInKm.toFixed(2);
-                    document.getElementById('estimatedFare').value = estimatedFare.toFixed(2);
-                } else {
-                    alert('Directions request failed due to ' + status);
-                }
-            });
-        }
-
-        // Submit booking to Google Sheets
-        function submitBooking(e) {
-            e.preventDefault();
-
-            // Validate form
-            const form = document.getElementById('bookingForm');
-            if (!form.checkValidity()) {
-                alert('Please fill all required fields');
-                return;
-            }
-
-            // Get form data
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-
-            // Get Google Sheets script URL
-            const scriptURL = document.getElementById('scriptUrl').value;
-            if (!scriptURL) {
-                alert('Missing Google Apps Script URL. Please contact the administrator.');
-                return;
-            }
-
-            // Show loading state
-            const submitButton = document.getElementById('submitButton');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Submitting...';
-
-            // Send data to Google Sheets
-            fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Booking submitted successfully! We will contact you shortly.');
-                    form.reset();
-                    document.getElementById('results').style.display = 'none';
-                    return response.text();
-                }
-                throw new Error('Network response was not ok.');
-            })
-            .then(data => console.log(data))
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to submit booking: ' + error.message);
-            })
-            .finally(() => {
-                // Reset button state
-                submitButton.disabled = false;
-                submitButton.textContent = 'Submit Booking';
-            });
-        }
-    </script>
 </head>
 <body>
     <div class="container">
@@ -339,6 +219,24 @@
         </div>
 
         <form id="bookingForm">
+            <div class="form-group">
+                <label>Trip Type*</label>
+                <div class="trip-type">
+                    <div class="trip-option selected" data-value="oneway">
+                        <input type="radio" id="oneway" name="tripType" value="oneway" checked hidden>
+                        One Way
+                    </div>
+                    <div class="trip-option" data-value="round">
+                        <input type="radio" id="round" name="tripType" value="round" hidden>
+                        Round Trip
+                    </div>
+                    <div class="trip-option" data-value="rental">
+                        <input type="radio" id="rental" name="tripType" value="rental" hidden>
+                        Hourly Rental
+                    </div>
+                </div>
+            </div>
+
             <div class="columns">
                 <div class="column">
                     <div class="form-group">
@@ -376,14 +274,14 @@
             </div>
 
             <div class="form-group">
-                <label for="note">Short Note</label>
+                <label for="note">Special Instructions</label>
                 <textarea id="note" name="note" rows="3" placeholder="Any special instructions or requirements"></textarea>
             </div>
 
             <div class="form-group">
                 <label>Vehicle Type*</label>
 
-                <div class="vehicle-option">
+                <div class="vehicle-option selected">
                     <input type="radio" id="hatchback" name="vehicleType" value="hatchback" class="vehicle-radio" checked>
                     <div class="vehicle-info">
                         <div class="vehicle-name">4+1 Hatchback</div>
@@ -410,7 +308,7 @@
                 <div class="vehicle-option">
                     <input type="radio" id="crysta" name="vehicleType" value="crysta" class="vehicle-radio">
                     <div class="vehicle-info">
-                        <div class="vehicle-name">7+1 Ertiga/Crysta</div>
+                        <div class="vehicle-name">7+1 Innova/Crysta</div>
                         <div class="vehicle-rate">₹20/km</div>
                     </div>
                 </div>
@@ -425,28 +323,296 @@
                 <p><strong>Distance:</strong> <span id="distanceResult"></span></p>
                 <p><strong>Estimated Duration:</strong> <span id="durationResult"></span></p>
                 <p class="fare-estimation">Estimated Fare: <span id="fareEstimation"></span></p>
-                <p class="safety-note">*Inclusive of GST. The actual bill might differ based on actual distance travelled, waiting time (for droptrips), night charges (for droptrips), hill-station charges & inter-state permits.</p>
+                <p class="safety-note">*Inclusive of GST. The actual bill might differ based on actual distance travelled, waiting time, night charges, hill-station charges & inter-state permits.</p>
 
                 <!-- Hidden fields to store calculated values -->
                 <input type="hidden" id="distanceKm" name="distanceKm">
                 <input type="hidden" id="estimatedFare" name="estimatedFare">
             </div>
-            
+
             <div class="form-group" style="margin-top: 20px;">
                 <button type="submit" id="submitButton">Submit Booking</button>
             </div>
 
+            <div id="successMessage" class="success-message">
+                Booking submitted successfully!
+                <div>Your booking reference is: <span id="bookingReference" class="booking-reference"></span></div>
+                <div>We will contact you shortly with confirmation details.</div>
+            </div>
+
+            <div id="errorMessage" class="error-message">
+                Failed to submit booking. Please try again or contact us directly.
+            </div>
+
             <!-- Hidden field for Google Sheet script URL -->
-            <input type="hidden" id="scriptUrl" name="scriptUrl" value="YOUR_GOOGLE_APPS_SCRIPT_URL_HERE">
+            <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/1YsBTfz96FBYy7QHAU1oijJAb2ibG0Ra2ggCQ2dXcIeA/exec">
         </form>
     </div>
 
     <!-- Hidden map div (required for Google Maps API to work) -->
     <div id="map"></div>
 
-    <!-- Replace YOUR_API_KEY with your actual Google Maps API key -->
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTm8unNAZY-We3a05qozpJMPgPJFvKk-8&libraries=places&callback=initMap">
+    <script>
+        // Global variables
+        let autocompletePickup;
+        let autocompleteDrop;
+        let directionsService;
+        let map;
+        let distanceInKm = 0;
+
+        // Set min date for pickup to today
+        const today = new Date();
+        const formattedDate = today.toISOString().slice(0, 16);
+        document.getElementById('pickupDate').min = formattedDate;
+
+        // Set default value to 1 hour from now
+        const oneHourLater = new Date(today.getTime() + (60 * 60 * 1000));
+        document.getElementById('pickupDate').value = oneHourLater.toISOString().slice(0, 16);
+
+        // Initialize Google Maps services
+        function initMap() {
+            try {
+                // Create map instance (required for the API even if not displayed)
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: 13.0827, lng: 80.2707}, // Default to Chennai
+                    zoom: 2,
+                    disableDefaultUI: true
+                });
+
+                // Initialize the Google Places Autocomplete
+                autocompletePickup = new google.maps.places.Autocomplete(
+                    document.getElementById('pickup'),
+                    {types: ['geocode']}
+                );
+
+                autocompleteDrop = new google.maps.places.Autocomplete(
+                    document.getElementById('dropoff'),
+                    {types: ['geocode']}
+                );
+
+                // Initialize the Directions Service
+                directionsService = new google.maps.DirectionsService();
+
+                // Add event listeners
+                document.getElementById('calculate').addEventListener('click', calculateFare);
+                document.getElementById('bookingForm').addEventListener('submit', submitBooking);
+
+                // Add event listeners to vehicle options
+                const vehicleOptions = document.querySelectorAll('.vehicle-option');
+                vehicleOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        // Remove selected class from all options
+                        vehicleOptions.forEach(opt => opt.classList.remove('selected'));
+                        // Add selected class to clicked option
+                        this.classList.add('selected');
+                        // Check the radio button
+                        const radio = this.querySelector('input[type="radio"]');
+                        radio.checked = true;
+
+                        // Recalculate fare if distance is available
+                        if (distanceInKm > 0) {
+                            calculateFare();
+                        }
+                    });
+                });
+
+                // Add event listeners to trip type options
+                const tripOptions = document.querySelectorAll('.trip-option');
+                tripOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        // Remove selected class from all options
+                        tripOptions.forEach(opt => opt.classList.remove('selected'));
+                        // Add selected class to clicked option
+                        this.classList.add('selected');
+                        // Check the radio button
+                        const tripType = this.getAttribute('data-value');
+                        document.querySelector(`input[value="${tripType}"]`).checked = true;
+
+                        // Recalculate fare if distance is available
+                        if (distanceInKm > 0) {
+                            calculateFare();
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error initializing map:', error);
+            }
+        }
+
+        // Calculate fare based on trip type, vehicle type and distance
+        function calculateFare() {
+            const pickup = document.getElementById('pickup').value;
+            const dropoff = document.getElementById('dropoff').value;
+
+            if (!pickup || !dropoff) {
+                alert('Please enter both pickup and drop locations');
+                return;
+            }
+
+            const request = {
+                origin: pickup,
+                destination: dropoff,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            directionsService.route(request, function(response, status) {
+                if (status === 'OK') {
+                    // Get the route
+                    const route = response.routes[0];
+
+                    // Extract distance information
+                    distanceInKm = route.legs[0].distance.value / 1000;
+                    const durationMin = route.legs[0].duration.value / 60;
+
+                    // Get selected vehicle type and trip type
+                    const vehicleType = document.querySelector('input[name="vehicleType"]:checked').value;
+                    const tripType = document.querySelector('input[name="tripType"]:checked').value;
+
+                    // Calculate fare based on vehicle type
+                    let ratePerKm = 0;
+                    switch(vehicleType) {
+                        case 'hatchback':
+                            ratePerKm = 13;
+                            break;
+                        case 'sedan':
+                            ratePerKm = 14;
+                            break;
+                        case 'ertiga':
+                            ratePerKm = 18;
+                            break;
+                        case 'crysta':
+                            ratePerKm = 20;
+                            break;
+                    }
+
+                    let estimatedFare = 0;
+
+                    // Adjust fare based on trip type
+                    switch(tripType) {
+                        case 'oneway':
+                            estimatedFare = distanceInKm * ratePerKm;
+                            break;
+                        case 'round':
+                            estimatedFare = distanceInKm * 2 * ratePerKm;
+                            break;
+                        case 'rental':
+                            // For rental, minimum 4 hours and we'll estimate 40km per 4 hours
+                            const hours = Math.max(4, Math.ceil(durationMin / 60));
+                            const estimatedTotalKm = Math.max(40, distanceInKm);
+                            estimatedFare = estimatedTotalKm * ratePerKm;
+                            break;
+                    }
+
+                    // Display results
+                    document.getElementById('distanceResult').textContent = distanceInKm.toFixed(2) + ' km';
+                    document.getElementById('durationResult').textContent = durationMin.toFixed(0) + ' minutes';
+                    document.getElementById('fareEstimation').textContent = '₹' + estimatedFare.toFixed(2);
+                    document.getElementById('results').style.display = 'block';
+
+                    // Store for form submission
+                    document.getElementById('distanceKm').value = distanceInKm.toFixed(2);
+                    document.getElementById('estimatedFare').value = estimatedFare.toFixed(2);
+                } else {
+                    alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+
+        // Submit booking to Google Sheets
+        function submitBooking(e) {
+            e.preventDefault();
+
+            // Validate form
+            const form = document.getElementById('bookingForm');
+            if (!form.checkValidity()) {
+                alert('Please fill all required fields');
+                return;
+            }
+
+            // Hide any previous messages
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+
+            // Get form data
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Get Google Sheets script URL
+            const scriptURL = document.getElementById('scriptUrl').value;
+            if (!scriptURL || scriptURL.includes('YOUR_SCRIPT_ID')) {
+                alert('Missing or invalid Google Apps Script URL. Please set up your script URL first.');
+                return;
+            }
+
+            // Show loading state
+            const submitButton = document.getElementById('submitButton');
+            const originalButtonText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="loading-spinner"></span>Submitting...';
+
+            // Send data to Google Sheets
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('bookingReference').textContent = data.reference;
+
+                    // Reset form
+                    form.reset();
+                    document.getElementById('results').style.display = 'none';
+
+                    // Reset trip type and vehicle selection UI
+                    document.querySelector('.trip-option[data-value="oneway"]').click();
+                    document.querySelector('.vehicle-option:first-child').click();
+
+                    // Set default pickup time again
+                    const newTime = new Date(Date.now() + (60 * 60 * 1000));
+                    document.getElementById('pickupDate').value = newTime.toISOString().slice(0, 16);
+                } else {
+                    // Show error message
+                    document.getElementById('errorMessage').style.display = 'block';
+                    console.error('Error:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').style.display = 'block';
+            })
+            .finally(() => {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            });
+        }
+
+        // Load Google Maps API with error handling
+        function loadGoogleMapsAPI() {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBTm8unNAZY-We3a05qozpJMPgPJFvKk-8&libraries=places&callback=initMap';
+            script.async = true;
+            script.defer = true;
+            script.onerror = function() {
+                console.error('Failed to load Google Maps API. Please check your API key and internet connection.');
+                alert('Failed to load map services. Please refresh the page or try again later.');
+            };
+            document.body.appendChild(script);
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGoogleMapsAPI();
+        });
     </script>
 </body>
 </html>
