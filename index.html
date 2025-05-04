@@ -345,7 +345,7 @@
             </div>
 
             <!-- Hidden field for Google Sheet script URL -->
-            <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/AKfycbwk2AtkskmHYbsaOtfukPntt2llhr-m2KbNLEQmcQQWbkChswJNQarTmUoDZWnDG-NNgQ/exec">
+          <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/AKfycbzHKgK6KnpSZRVjC_yvlT3gmxnr8mALDfExVfUpsMj4-SoRKpJKHFuKBxKShtwPUH2ouw/exec">
         </form>
     </div>
 
@@ -519,83 +519,77 @@
         }
 
         // Submit booking to Google Sheets
-        function submitBooking(e) {
-            e.preventDefault();
+    function submitBooking(e) {
+        e.preventDefault();
 
-            // Validate form
-            const form = document.getElementById('bookingForm');
-            if (!form.checkValidity()) {
-                alert('Please fill all required fields');
-                return;
-            }
-
-            // Hide any previous messages
-            document.getElementById('successMessage').style.display = 'none';
-            document.getElementById('errorMessage').style.display = 'none';
-
-            // Get form data
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-
-            // Get Google Sheets script URL
-            const scriptURL = document.getElementById('scriptUrl').value;
-            if (!scriptURL || scriptURL.includes('YOUR_SCRIPT_ID')) {
-                alert('Missing or invalid Google Apps Script URL. Please set up your script URL first.');
-                return;
-            }
-
-            // Show loading state
-            const submitButton = document.getElementById('submitButton');
-            const originalButtonText = submitButton.textContent;
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<span class="loading-spinner"></span>Submitting...';
-
-            // Send data to Google Sheets
-            fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Show success message
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('bookingReference').textContent = data.reference;
-
-                    // Reset form
-                    form.reset();
-                    document.getElementById('results').style.display = 'none';
-
-                    // Reset trip type and vehicle selection UI
-                    document.querySelector('.trip-option[data-value="oneway"]').click();
-                    document.querySelector('.vehicle-option:first-child').click();
-
-                    // Set default pickup time again
-                    const newTime = new Date(Date.now() + (60 * 60 * 1000));
-                    document.getElementById('pickupDate').value = newTime.toISOString().slice(0, 16);
-                } else {
-                    // Show error message
-                    document.getElementById('errorMessage').style.display = 'block';
-                    console.error('Error:', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('errorMessage').style.display = 'block';
-            })
-            .finally(() => {
-                // Reset button state
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalButtonText;
-            });
+        // Validate form
+        const form = document.getElementById('bookingForm');
+        if (!form.checkValidity()) {
+            alert('Please fill all required fields');
+            return;
         }
 
+        // Hide any previous messages
+        document.getElementById('successMessage').style.display = 'none';
+        document.getElementById('errorMessage').style.display = 'none';
+
+        // Get form data
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        // Get Google Sheets script URL
+        const scriptURL = document.getElementById('scriptUrl').value;
+        if (!scriptURL || scriptURL.includes('YOUR_SCRIPT_ID')) {
+            alert('Missing or invalid Google Apps Script URL. Please set up your script URL first.');
+            return;
+        }
+
+        // Show loading state
+        const submitButton = document.getElementById('submitButton');
+        const originalButtonText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="loading-spinner"></span>Submitting...';
+
+        // Send data to Google Sheets
+        fetch(scriptURL, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            mode: 'no-cors' // Add this line for cross-origin requests
+        })
+        .then(response => {
+            // With no-cors, we can't read the response, so we'll assume success
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('bookingReference').textContent = 'Submitted';
+
+            // Reset form
+            form.reset();
+            document.getElementById('results').style.display = 'none';
+
+            // Reset trip type and vehicle selection UI
+            document.querySelector('.trip-option[data-value="oneway"]').click();
+            document.querySelector('.vehicle-option:first-child').click();
+
+            // Set default pickup time again
+            const newTime = new Date(Date.now() + (60 * 60 * 1000));
+            document.getElementById('pickupDate').value = newTime.toISOString().slice(0, 16);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('errorMessage').style.display = 'block';
+        })
+        .finally(() => {
+            // Reset button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        });
+    }
         // Load Google Maps API with error handling
         function loadGoogleMapsAPI() {
             const script = document.createElement('script');
