@@ -207,6 +207,15 @@
             color: #1a5276;
             margin-top: 10px;
         }
+        /* Add form feedback styles */
+        .form-error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        input.error, textarea.error, select.error {
+            border-color: #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -242,16 +251,19 @@
                     <div class="form-group">
                         <label for="name">Full Name*</label>
                         <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                        <div class="form-error" id="nameError"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email Address*</label>
                         <input type="email" id="email" name="email" required placeholder="Enter your email address">
+                        <div class="form-error" id="emailError"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="phone">WhatsApp Number*</label>
                         <input type="tel" id="phone" name="phone" required placeholder="Enter your WhatsApp number">
+                        <div class="form-error" id="phoneError"></div>
                     </div>
                 </div>
 
@@ -259,16 +271,19 @@
                     <div class="form-group">
                         <label for="pickup">Pickup Location*</label>
                         <input type="text" id="pickup" name="pickup" required placeholder="Enter pickup location">
+                        <div class="form-error" id="pickupError"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="dropoff">Drop Location*</label>
                         <input type="text" id="dropoff" name="dropoff" required placeholder="Enter drop location">
+                        <div class="form-error" id="dropoffError"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="pickupDate">Pickup Date & Time*</label>
                         <input type="datetime-local" id="pickupDate" name="pickupDate" required>
+                        <div class="form-error" id="pickupDateError"></div>
                     </div>
                 </div>
             </div>
@@ -359,6 +374,7 @@
         let directionsService;
         let map;
         let distanceInKm = 0;
+        let calculatedFare = false;
 
         // Set min date for pickup to today
         const today = new Date();
@@ -436,7 +452,119 @@
                 });
             } catch (error) {
                 console.error('Error initializing map:', error);
+                showErrorMessage('Failed to initialize map services. Please refresh the page.');
             }
+        }
+
+        // Helper function to show error message
+        function showErrorMessage(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            // Hide success message if it's displayed
+            document.getElementById('successMessage').style.display = 'none';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Clear all form errors
+        function clearAllErrors() {
+            const errorElements = document.querySelectorAll('.form-error');
+            const inputElements = document.querySelectorAll('input, textarea, select');
+
+            errorElements.forEach(element => {
+                element.textContent = '';
+            });
+
+            inputElements.forEach(element => {
+                element.classList.remove('error');
+            });
+        }
+
+        // Reset form completely
+        function resetForm() {
+            document.getElementById('bookingForm').reset();
+            document.getElementById('results').style.display = 'none';
+            calculatedFare = false;
+            clearAllErrors();
+
+            // Reset trip type selection
+            const tripOptions = document.querySelectorAll('.trip-option');
+            tripOptions.forEach(opt => opt.classList.remove('selected'));
+            document.querySelector('.trip-option[data-value="oneway"]').classList.add('selected');
+            document.getElementById('oneway').checked = true;
+
+            // Reset vehicle selection
+            const vehicleOptions = document.querySelectorAll('.vehicle-option');
+            vehicleOptions.forEach(opt => opt.classList.remove('selected'));
+            vehicleOptions[0].classList.add('selected');
+            document.getElementById('hatchback').checked = true;
+
+            // Set default pickup time again
+            const newTime = new Date(Date.now() + (60 * 60 * 1000));
+            document.getElementById('pickupDate').value = newTime.toISOString().slice(0, 16);
+        }
+
+        // Improved validation function
+        function validateForm() {
+            let isValid = true;
+            const required = ['name', 'email', 'phone', 'pickup', 'dropoff', 'pickupDate'];
+            const errors = {};
+
+            // Clear all previous errors
+            clearAllErrors();
+
+            // Check required fields
+            required.forEach(field => {
+                const input = document.getElementById(field);
+                if (!input.value.trim()) {
+                    input.classList.add('error');
+                    const errorElement = document.getElementById(field + 'Error');
+                    if (errorElement) errorElement.textContent = 'This field is required';
+                    isValid = false;
+                    errors[field] = 'required';
+                }
+            });
+
+            // Validate email format
+            const email = document.getElementById('email');
+            if (email.value && !validateEmail(email.value)) {
+                email.classList.add('error');
+                document.getElementById('emailError').textContent = 'Please enter a valid email address';
+                isValid = false;
+                errors.email = 'invalid';
+            }
+
+            // Validate phone number
+            const phone = document.getElementById('phone');
+            if (phone.value && !validatePhone(phone.value)) {
+                phone.classList.add('error');
+                document.getElementById('phoneError').textContent = 'Please enter a valid phone number';
+                isValid = false;
+                errors.phone = 'invalid';
+            }
+
+            // Check if fare was calculated
+            if (!calculatedFare) {
+                showErrorMessage('Please calculate the fare before submitting');
+                isValid = false;
+                errors.fare = 'not_calculated';
+            }
+
+            return { isValid, errors };
+        }
+
+        // Email validation helper
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Phone validation helper
+        function validatePhone(phone) {
+            // Basic validation - adjust as needed
+            return phone.length >= 10;
         }
 
         // Calculate fare based on trip type, vehicle type and distance
@@ -444,10 +572,27 @@
             const pickup = document.getElementById('pickup').value;
             const dropoff = document.getElementById('dropoff').value;
 
-            if (!pickup || !dropoff) {
-                alert('Please enter both pickup and drop locations');
+            // Clear any previous errors
+            clearAllErrors();
+
+            // Validate inputs
+            if (!pickup) {
+                document.getElementById('pickup').classList.add('error');
+                document.getElementById('pickupError').textContent = 'Pickup location is required';
                 return;
             }
+
+            if (!dropoff) {
+                document.getElementById('dropoff').classList.add('error');
+                document.getElementById('dropoffError').textContent = 'Drop location is required';
+                return;
+            }
+
+            // Show loading state on the calculate button
+            const calculateButton = document.getElementById('calculate');
+            const originalButtonText = calculateButton.textContent;
+            calculateButton.disabled = true;
+            calculateButton.innerHTML = '<span class="loading-spinner"></span>Calculating...';
 
             const request = {
                 origin: pickup,
@@ -456,6 +601,10 @@
             };
 
             directionsService.route(request, function(response, status) {
+                // Reset button state
+                calculateButton.disabled = false;
+                calculateButton.textContent = originalButtonText;
+
                 if (status === 'OK') {
                     // Get the route
                     const route = response.routes[0];
@@ -505,91 +654,111 @@
 
                     // Display results
                     document.getElementById('distanceResult').textContent = distanceInKm.toFixed(2) + ' km';
-                    document.getElementById('durationResult').textContent = durationMin.toFixed(0) + ' minutes';
-                    document.getElementById('fareEstimation').textContent = '₹' + estimatedFare.toFixed(2);
+                    document.getElementById('durationResult').textContent = Math.round(durationMin) + ' minutes';
+                    document.getElementById('fareEstimation').textContent = '₹' + Math.round(estimatedFare);
                     document.getElementById('results').style.display = 'block';
 
                     // Store for form submission
                     document.getElementById('distanceKm').value = distanceInKm.toFixed(2);
-                    document.getElementById('estimatedFare').value = estimatedFare.toFixed(2);
+                    document.getElementById('estimatedFare').value = Math.round(estimatedFare);
+
+                    // Mark that fare was calculated
+                    calculatedFare = true;
                 } else {
-                    alert('Directions request failed due to ' + status);
+                    // Handle specific error cases
+                    let errorMessage = 'Could not calculate route. Please check your locations and try again.';
+
+                    if (status === 'ZERO_RESULTS') {
+                        errorMessage = 'No route found between these locations. Please check and try again.';
+                    } else if (status === 'NOT_FOUND') {
+                        errorMessage = 'One or both locations could not be found. Please check the spelling.';
+                    }
+
+                    showErrorMessage(errorMessage);
                 }
             });
         }
 
         // Submit booking to Google Sheets
-    function submitBooking(e) {
-        e.preventDefault();
+        function submitBooking(e) {
+            e.preventDefault();
 
-        // Validate form
-        const form = document.getElementById('bookingForm');
-        if (!form.checkValidity()) {
-            alert('Please fill all required fields');
-            return;
+            // Hide any previous messages
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+
+            // Validate form
+            const { isValid, errors } = validateForm();
+            if (!isValid) {
+                return;
+            }
+
+            // Get form data
+            const formData = new FormData(document.getElementById('bookingForm'));
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Get Google Sheets script URL
+            const scriptURL = document.getElementById('scriptUrl').value;
+            if (!scriptURL) {
+                showErrorMessage('Missing Google Apps Script URL. Please set up your script URL first.');
+                return;
+            }
+
+            // Show loading state
+            const submitButton = document.getElementById('submitButton');
+            const originalButtonText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="loading-spinner"></span>Submitting...';
+
+            // Generate a booking reference number
+            const bookingRef = generateBookingReference();
+            data.bookingReference = bookingRef;
+
+            // Send data to Google Sheets
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'no-cors' // Required for cross-origin requests
+            })
+            .then(() => {
+                // With no-cors mode, we can't actually read the response status
+                // So we'll assume success (the actual data is being stored in the sheet)
+
+                // Show success message with booking reference
+                document.getElementById('bookingReference').textContent = bookingRef;
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+
+                // Reset form completely (including errors and selections)
+                resetForm();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('errorMessage').textContent = 'Failed to submit booking. Please try again or contact us directly.';
+            })
+            .finally(() => {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            });
         }
 
-        // Hide any previous messages
-        document.getElementById('successMessage').style.display = 'none';
-        document.getElementById('errorMessage').style.display = 'none';
-
-        // Get form data
-        const formData = new FormData(form);
-        const data = {};
-        formData.forEach((value, key) => {
-            data[key] = value;
-        });
-
-        // Get Google Sheets script URL
-        const scriptURL = document.getElementById('scriptUrl').value;
-        if (!scriptURL || scriptURL.includes('YOUR_SCRIPT_ID')) {
-            alert('Missing or invalid Google Apps Script URL. Please set up your script URL first.');
-            return;
+        // Generate a booking reference number
+        function generateBookingReference() {
+            const prefix = 'MT';
+            const timestamp = new Date().getTime().toString().slice(-6);
+            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            return `${prefix}${timestamp}${random}`;
         }
 
-        // Show loading state
-        const submitButton = document.getElementById('submitButton');
-        const originalButtonText = submitButton.textContent;
-        submitButton.disabled = true;
-        submitButton.innerHTML = '<span class="loading-spinner"></span>Submitting...';
-
-        // Send data to Google Sheets
-        fetch(scriptURL, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            mode: 'no-cors' // Add this line for cross-origin requests
-        })
-        .then(response => {
-            // With no-cors, we can't read the response, so we'll assume success
-            // Show success message
-            document.getElementById('successMessage').style.display = 'block';
-            document.getElementById('bookingReference').textContent = 'Submitted';
-
-            // Reset form
-            form.reset();
-            document.getElementById('results').style.display = 'none';
-
-            // Reset trip type and vehicle selection UI
-            document.querySelector('.trip-option[data-value="oneway"]').click();
-            document.querySelector('.vehicle-option:first-child').click();
-
-            // Set default pickup time again
-            const newTime = new Date(Date.now() + (60 * 60 * 1000));
-            document.getElementById('pickupDate').value = newTime.toISOString().slice(0, 16);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('errorMessage').style.display = 'block';
-        })
-        .finally(() => {
-            // Reset button state
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonText;
-        });
-    }
         // Load Google Maps API with error handling
         function loadGoogleMapsAPI() {
             const script = document.createElement('script');
@@ -597,8 +766,8 @@
             script.async = true;
             script.defer = true;
             script.onerror = function() {
-                console.error('Failed to load Google Maps API. Please check your API key and internet connection.');
-                alert('Failed to load map services. Please refresh the page or try again later.');
+                console.error('Failed to load Google Maps API');
+                showErrorMessage('Failed to load map services. Please refresh the page or try again later.');
             };
             document.body.appendChild(script);
         }
