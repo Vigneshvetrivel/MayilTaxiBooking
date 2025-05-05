@@ -63,19 +63,16 @@ function initMap() {
         });
 
         // Add event listeners to trip type options
-        const tripOptions = document.querySelectorAll('.trip-type .btn');
+        const tripOptions = document.querySelectorAll('.trip-option');
         tripOptions.forEach(option => {
             option.addEventListener('click', function() {
                 // Remove selected class from all options
-                tripOptions.forEach(opt => opt.classList.remove('active'));
+                tripOptions.forEach(opt => opt.classList.remove('selected'));
                 // Add selected class to clicked option
-                this.classList.add('active');
-                
-                // Find the associated radio button and check it
-                const associatedRadioId = this.getAttribute('for');
-                if (associatedRadioId) {
-                    document.getElementById(associatedRadioId).checked = true;
-                }
+                this.classList.add('selected');
+                // Check the radio button
+                const tripType = this.getAttribute('data-value');
+                document.querySelector(`input[value="${tripType}"]`).checked = true;
 
                 // Recalculate fare if distance is available
                 if (distanceInKm > 0) {
@@ -83,21 +80,90 @@ function initMap() {
                 }
             });
         });
+
+        // Verify critical elements exist
+        console.log('Verifying HTML elements...');
+        verifyElements();
+
     } catch (error) {
         console.error('Error initializing map:', error);
         showErrorMessage('Failed to initialize map services. Please refresh the page.');
     }
 }
 
+// Helper function to verify elements exist
+function verifyElements() {
+    const elements = [
+        'successMessage',
+        'errorMessage',
+        'bookingReference',
+        'submitButton',
+        'bookingForm'
+    ];
+
+    let allFound = true;
+
+    elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (!element) {
+            console.error(`Element with ID '${id}' not found in the document!`);
+            allFound = false;
+        } else {
+            console.log(`Element with ID '${id}' found.`);
+        }
+    });
+
+    return allFound;
+}
+
+// Helper function to show success message
+function showSuccessMessage(bookingRef) {
+    const successElement = document.getElementById('successMessage');
+    if (successElement) {
+        const bookingRefElement = document.getElementById('bookingReference');
+        if (bookingRefElement) {
+            bookingRefElement.textContent = bookingRef;
+        }
+        successElement.style.display = 'block';
+
+        // Hide error message if it's displayed
+        const errorElement = document.getElementById('errorMessage');
+        if (errorElement) {
+            errorElement.style.display = 'none';
+        }
+
+        // Scroll to success message
+        successElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+        console.error('Success message element not found!');
+        alert('Booking submitted successfully! Reference: ' + bookingRef);
+    }
+}
+
 // Helper function to show error message
 function showErrorMessage(message) {
     const errorElement = document.getElementById('errorMessage');
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
-    // Hide success message if it's displayed
-    document.getElementById('successMessage').style.display = 'none';
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+
+        // Hide success message if it's displayed
+        const successElement = document.getElementById('successMessage');
+        if (successElement) {
+            successElement.style.display = 'none';
+        }
+
+        // Only scroll if error element exists
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+        console.error('Error message element not found!');
+        alert('Error: ' + message);
+    }
+
     setTimeout(() => {
-        errorElement.style.display = 'none';
+        if (errorElement) {
+            errorElement.style.display = 'none';
+        }
     }, 5000);
 }
 
@@ -123,9 +189,10 @@ function resetForm() {
     clearAllErrors();
 
     // Reset trip type selection
-    const tripButtons = document.querySelectorAll('.trip-type .btn');
-    tripButtons.forEach(btn => btn.classList.remove('active'));
-    document.querySelector('.trip-type .btn[for="drop"]').classList.add('active');
+    document.querySelectorAll('.trip-type .btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector('label[for="drop"]').classList.add('active');
     document.getElementById('drop').checked = true;
 
     // Reset vehicle selection
@@ -225,7 +292,7 @@ function calculateFare() {
     const calculateButton = document.getElementById('calculate');
     const originalButtonText = calculateButton.textContent;
     calculateButton.disabled = true;
-    calculateButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Calculating...';
+    calculateButton.innerHTML = '<span class="loading-spinner"></span>Calculating...';
 
     const request = {
         origin: pickup,
@@ -309,14 +376,19 @@ function calculateFare() {
 // Submit booking to Google Sheets
 function submitBooking(e) {
     e.preventDefault();
+    console.log("Submitting booking form...");
 
     // Hide any previous messages
-    document.getElementById('successMessage').style.display = 'none';
-    document.getElementById('errorMessage').style.display = 'none';
+    const successElement = document.getElementById('successMessage');
+    const errorElement = document.getElementById('errorMessage');
+
+    if (successElement) successElement.style.display = 'none';
+    if (errorElement) errorElement.style.display = 'none';
 
     // Validate form
     const { isValid, errors } = validateForm();
     if (!isValid) {
+        console.log("Form validation failed:", errors);
         return;
     }
 
@@ -326,6 +398,7 @@ function submitBooking(e) {
     formData.forEach((value, key) => {
         data[key] = value;
     });
+    console.log("Form data collected:", data);
 
     // Get Google Sheets script URL
     const scriptURL = document.getElementById('scriptUrl').value;
@@ -338,18 +411,11 @@ function submitBooking(e) {
     const submitButton = document.getElementById('submitButton');
     const originalButtonText = submitButton.textContent;
     submitButton.disabled = true;
-    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Submitting...';
+    submitButton.innerHTML = '<span class="loading-spinner"></span>Submitting...';
 
-    // Call the success function directly in this test version
-    // This will help verify if the success message functionality works correctly
-    // In production, uncomment the fetch call below
-    setTimeout(() => {
-        showSuccessMessage();
-        submitButton.disabled = false;
-        submitButton.innerHTML = originalButtonText;
-    }, 1500);
-    
-    /* In production, use this code:
+    console.log("Sending data to Google Sheets script URL:", scriptURL);
+
+    // Send data to Google Sheets
     fetch(scriptURL, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -359,34 +425,31 @@ function submitBooking(e) {
         mode: 'no-cors' // Required for cross-origin requests
     })
     .then(() => {
-        showSuccessMessage();
+        console.log("Request completed. With no-cors mode, we can't read the response.");
+
+        // With no-cors mode, we can't actually read the response status
+        // We'll assume success since the request didn't throw an error
+
+        // Generate a booking reference number with the same format as the server
+        const bookingRef = generateBookingReference();
+        console.log("Generated booking reference:", bookingRef);
+
+        // Show success message with booking reference
+        showSuccessMessage(bookingRef);
+
+        // Reset form completely
+        resetForm();
     })
     .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('errorMessage').style.display = 'block';
-        document.getElementById('successMessage').style.display = 'none';
-        document.getElementById('errorMessage').textContent = 'Failed to submit booking. Please try again or contact us directly.';
+        console.error('Fetch error:', error);
+        showErrorMessage('Failed to submit booking. Please try again or contact us directly.');
     })
     .finally(() => {
         // Reset button state
         submitButton.disabled = false;
         submitButton.innerHTML = originalButtonText;
+        console.log("Submission process completed");
     });
-    */
-}
-
-// Show success message with booking reference
-function showSuccessMessage() {
-    // Generate a booking reference number
-    const bookingRef = generateBookingReference();
-    
-    // Show success message with booking reference
-    document.getElementById('bookingReference').textContent = bookingRef;
-    document.getElementById('successMessage').style.display = 'block';
-    document.getElementById('errorMessage').style.display = 'none';
-    
-    // Reset form completely (including errors and selections)
-    resetForm();
 }
 
 // Generate a booking reference number that matches the server-side format
@@ -424,5 +487,6 @@ function loadGoogleMapsAPI() {
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM fully loaded. Initializing app...");
     loadGoogleMapsAPI();
 });
