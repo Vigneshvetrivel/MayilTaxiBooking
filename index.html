@@ -1,780 +1,503 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Mayil Taxi and Travels - Booking Form</title>
+    <title>Mayil Taxi - Booking Form</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="1.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
+        :root {
+            --primary: #ffbf00;
+            --secondary: #212529;
+            --light-gray: #f8f9fa;
+        }
+
         body {
+            background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-            color: #333;
         }
-        .container {
+
+        .navbar-brand img {
+            max-height: 50px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .logo-container img {
+            max-height: 250px;
+        }
+
+        .booking-container {
             background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
         }
-        h1 {
-            color: #1a5276;
-            text-align: center;
-            margin-bottom: 30px;
+
+        .trip-type .btn {
+            border: 2px solid #dee2e6;
+            background-color: white;
+            color: #495057;
+            transition: all 0.3s;
         }
-        .form-row {
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="datetime-local"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-            background-color: #f9f9f9;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-        }
-        button {
-            background-color: #1a5276;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #154360;
-        }
-        .results {
-            margin-top: 30px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-        }
-        .safety-note {
-            font-size: 14px;
-            color: #7f8c8d;
-            font-style: italic;
-            margin-top: 10px;
-        }
-        .fare-estimation {
+
+        .trip-type .btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: var(--secondary);
             font-weight: bold;
-            color: #2c3e50;
-            font-size: 18px;
         }
-        .columns {
-            display: flex;
-            gap: 20px;
-        }
-        .column {
-            flex: 1;
-        }
-        @media (max-width: 768px) {
-            .columns {
-                flex-direction: column;
-            }
-        }
-        #map {
-            height: 0;
-            width: 0;
-        }
+
         .vehicle-option {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            cursor: pointer;
-        }
-        .vehicle-option.selected {
-            border-color: #3498db;
-            background-color: #ebf5fb;
-        }
-        .vehicle-radio {
-            margin-right: 10px;
-        }
-        .vehicle-info {
-            flex-grow: 1;
-        }
-        .vehicle-name {
-            font-weight: 600;
-        }
-        .vehicle-rate {
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        .logo {
-            width: 80px;
-            height: 80px;
-            background-color: #1a5276;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-            margin-right: 20px;
-        }
-        .header-text {
-            flex-grow: 1;
-        }
-        .trip-type {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .trip-option {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.3s;
         }
-        .trip-option.selected {
-            border-color: #3498db;
-            background-color: #ebf5fb;
-            font-weight: 600;
+
+        .vehicle-option:hover {
+            border-color: #adb5bd;
         }
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
+
+        .vehicle-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(255, 191, 0, 0.1);
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+
+        .vehicle-option .form-check {
+            padding-left: 0;
         }
-        .success-message {
-            display: none;
-            background-color: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-            text-align: center;
-        }
-        .error-message {
-            display: none;
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-            text-align: center;
-        }
-        .booking-reference {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1a5276;
+
+        .vehicle-option .form-check-input {
             margin-top: 10px;
         }
-        /* Add form feedback styles */
-        .form-error {
-            color: #dc3545;
-            font-size: 14px;
+
+        .vehicle-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vehicle-rate {
+            font-weight: bold;
+            color: var(--primary);
+            background-color: rgba(255, 191, 0, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .results {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .fare-estimation {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .btn-calculate {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+        }
+
+        .btn-calculate:hover {
+            background-color: #343a40;
+            color: var(--primary);
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: var(--secondary);
+            font-weight: bold;
+            border: none;
+        }
+
+        .btn-submit:hover {
+            background-color: #e6ac00;
+        }
+
+        #map {
+            display: none;
+        }
+
+        .success-message, .error-message {
+            display: none;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+
+        .booking-reference {
+            font-weight: bold;
+            background-color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
             margin-top: 5px;
         }
-        input.error, textarea.error, select.error {
-            border-color: #dc3545;
+
+        .safety-note {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .footer h5 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-social .btn {
+            background-color: #343a40;
+            color: white;
+            margin-right: 5px;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-social .btn:hover {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+
+        .footer-contact li {
+            margin-bottom: 15px;
+        }
+
+        .footer-contact .icon {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .footer-links a {
+            color: #dee2e6;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #adb5bd;
+        }
+
+        @media (max-width: 767.98px) {
+            .booking-container {
+                padding: 20px;
+            }
+
+            .footer-section {
+                margin-bottom: 30px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">MT</div>
-            <div class="header-text">
-                <h1>Mayil Taxi and Travels</h1>
-            </div>
+    <div class="container mt-4">
+        <div class="logo-container">
+            <img src="1.png" alt="Mayil Taxi Logo" class="img-fluid">
         </div>
 
-        <form id="bookingForm">
-            <div class="form-group">
-                <label>Trip Type*</label>
-                <div class="trip-type">
-                    <div class="trip-option selected" data-value="oneway">
-                        <input type="radio" id="oneway" name="tripType" value="oneway" checked hidden>
-                        One Way
-                    </div>
-                    <div class="trip-option" data-value="round">
-                        <input type="radio" id="round" name="tripType" value="round" hidden>
-                        Round Trip
-                    </div>
-                    <div class="trip-option" data-value="rental">
-                        <input type="radio" id="rental" name="tripType" value="rental" hidden>
-                        Hourly Rental
-                    </div>
-                </div>
-            </div>
+        <div class="booking-container">
+            <form id="bookingForm">
+                <!-- Trip Type -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Trip Type*</label>
+                    <div class="trip-type btn-group w-100" role="group">
+                        <input type="radio" class="btn-check" name="tripType" id="drop" value="drop" checked>
+                        <label class="btn btn-outline-primary active" for="drop">Drop Trip</label>
 
-            <div class="columns">
-                <div class="column">
-                    <div class="form-group">
-                        <label for="name">Full Name*</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your full name">
-                        <div class="form-error" id="nameError"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email Address*</label>
-                        <input type="email" id="email" name="email" required placeholder="Enter your email address">
-                        <div class="form-error" id="emailError"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">WhatsApp Number*</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="Enter your WhatsApp number">
-                        <div class="form-error" id="phoneError"></div>
+                        <input type="radio" class="btn-check" name="tripType" id="round" value="round">
+                        <label class="btn btn-outline-primary" for="round">Round Trip</label>
                     </div>
                 </div>
 
-                <div class="column">
-                    <div class="form-group">
-                        <label for="pickup">Pickup Location*</label>
-                        <input type="text" id="pickup" name="pickup" required placeholder="Enter pickup location">
-                        <div class="form-error" id="pickupError"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Personal Information -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name*</label>
+                            <input type="text" class="form-control" id="name" name="name" required placeholder="Enter your full name">
+                            <div class="invalid-feedback" id="nameError"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address*</label>
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email address">
+                            <div class="invalid-feedback" id="emailError"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">WhatsApp Number*</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required placeholder="Enter your WhatsApp number">
+                            <div class="invalid-feedback" id="phoneError"></div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="dropoff">Drop Location*</label>
-                        <input type="text" id="dropoff" name="dropoff" required placeholder="Enter drop location">
-                        <div class="form-error" id="dropoffError"></div>
-                    </div>
+                    <div class="col-md-6">
+                        <!-- Trip Information -->
+                        <div class="mb-3">
+                            <label for="pickup" class="form-label">Pickup Location*</label>
+                            <input type="text" class="form-control" id="pickup" name="pickup" required placeholder="Enter pickup location">
+                            <div class="invalid-feedback" id="pickupError"></div>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="pickupDate">Pickup Date & Time*</label>
-                        <input type="datetime-local" id="pickupDate" name="pickupDate" required>
-                        <div class="form-error" id="pickupDateError"></div>
-                    </div>
-                </div>
-            </div>
+                        <div class="mb-3">
+                            <label for="dropoff" class="form-label">Drop Location*</label>
+                            <input type="text" class="form-control" id="dropoff" name="dropoff" required placeholder="Enter drop location">
+                            <div class="invalid-feedback" id="dropoffError"></div>
+                        </div>
 
-            <div class="form-group">
-                <label for="note">Special Instructions</label>
-                <textarea id="note" name="note" rows="3" placeholder="Any special instructions or requirements"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Vehicle Type*</label>
-
-                <div class="vehicle-option selected">
-                    <input type="radio" id="hatchback" name="vehicleType" value="hatchback" class="vehicle-radio" checked>
-                    <div class="vehicle-info">
-                        <div class="vehicle-name">4+1 Hatchback</div>
-                        <div class="vehicle-rate">₹13/km</div>
-                    </div>
-                </div>
-
-                <div class="vehicle-option">
-                    <input type="radio" id="sedan" name="vehicleType" value="sedan" class="vehicle-radio">
-                    <div class="vehicle-info">
-                        <div class="vehicle-name">4+1 Sedan</div>
-                        <div class="vehicle-rate">₹14/km</div>
-                    </div>
-                </div>
-
-                <div class="vehicle-option">
-                    <input type="radio" id="ertiga" name="vehicleType" value="ertiga" class="vehicle-radio">
-                    <div class="vehicle-info">
-                        <div class="vehicle-name">6+1 Ertiga/Rumion</div>
-                        <div class="vehicle-rate">₹18/km</div>
+                        <div class="mb-3">
+                            <label for="pickupDate" class="form-label">Pickup Date & Time*</label>
+                            <input type="datetime-local" class="form-control" id="pickupDate" name="pickupDate" required>
+                            <div class="invalid-feedback" id="pickupDateError"></div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="vehicle-option">
-                    <input type="radio" id="crysta" name="vehicleType" value="crysta" class="vehicle-radio">
-                    <div class="vehicle-info">
-                        <div class="vehicle-name">7+1 Innova/Crysta</div>
-                        <div class="vehicle-rate">₹20/km</div>
+                <div class="mb-4">
+                    <label for="note" class="form-label">Special Instructions</label>
+                    <textarea class="form-control" id="note" name="note" rows="3" placeholder="Any special instructions or requirements"></textarea>
+                </div>
+
+                <!-- Vehicle Type -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Vehicle Type*</label>
+
+                    <div class="vehicle-option selected" onclick="selectVehicle(this, 'hatchback')">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="vehicleType" id="hatchback" value="hatchback" checked>
+                            <div class="vehicle-info">
+                                <label class="form-check-label fw-bold" for="hatchback">
+                                    4+1 Hatchback
+                                </label>
+                                <span class="vehicle-rate">₹13/km</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vehicle-option" onclick="selectVehicle(this, 'sedan')">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="vehicleType" id="sedan" value="sedan">
+                            <div class="vehicle-info">
+                                <label class="form-check-label fw-bold" for="sedan">
+                                    4+1 Sedan
+                                </label>
+                                <span class="vehicle-rate">₹14/km</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vehicle-option" onclick="selectVehicle(this, 'ertiga')">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="vehicleType" id="ertiga" value="ertiga">
+                            <div class="vehicle-info">
+                                <label class="form-check-label fw-bold" for="ertiga">
+                                    6+1 Ertiga/Rumion
+                                </label>
+                                <span class="vehicle-rate">₹18/km</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vehicle-option" onclick="selectVehicle(this, 'crysta')">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="vehicleType" id="crysta" value="crysta">
+                            <div class="vehicle-info">
+                                <label class="form-check-label fw-bold" for="crysta">
+                                    7+1 Innova/Crysta
+                                </label>
+                                <span class="vehicle-rate">₹20/km</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <button type="button" id="calculate">Calculate Fare</button>
-            </div>
+                <div class="d-grid gap-2 mb-4">
+                    <button type="button" id="calculate" class="btn btn-calculate btn-lg">Calculate Fare</button>
+                </div>
 
-            <div id="results" style="display: none;" class="results">
-                <h2>Trip Details</h2>
-                <p><strong>Distance:</strong> <span id="distanceResult"></span></p>
-                <p><strong>Estimated Duration:</strong> <span id="durationResult"></span></p>
-                <p class="fare-estimation">Estimated Fare: <span id="fareEstimation"></span></p>
-                <p class="safety-note">*Inclusive of GST. The actual bill might differ based on actual distance travelled, waiting time, night charges, hill-station charges & inter-state permits.</p>
+                <!-- Results Section -->
+                <div id="results" class="results" style="display: none;">
+                    <h4 class="mb-3">Trip Details</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Distance:</strong> <span id="distanceResult"></span></p>
+                            <p><strong>Estimated Duration:</strong> <span id="durationResult"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fare-estimation">Estimated Fare: <span id="fareEstimation"></span></p>
+                            <p class="safety-note">*Inclusive of GST. The actual bill might differ based on actual distance travelled, waiting time, night charges, hill-station charges & inter-state permits.</p>
+                        </div>
+                    </div>
 
-                <!-- Hidden fields to store calculated values -->
-                <input type="hidden" id="distanceKm" name="distanceKm">
-                <input type="hidden" id="estimatedFare" name="estimatedFare">
-            </div>
+                    <!-- Hidden fields to store calculated values -->
+                    <input type="hidden" id="distanceKm" name="distanceKm">
+                    <input type="hidden" id="estimatedFare" name="estimatedFare">
+                </div>
 
-            <div class="form-group" style="margin-top: 20px;">
-                <button type="submit" id="submitButton">Submit Booking</button>
-            </div>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" id="submitButton" class="btn btn-submit btn-lg">Submit Booking</button>
+  </div>
 
-            <div id="successMessage" class="success-message">
-                Booking submitted successfully!
-                <div>Your booking reference is: <span id="bookingReference" class="booking-reference"></span></div>
-                <div>We will contact you shortly with confirmation details.</div>
-            </div>
+                <div id="successMessage" class="success-message">
+                    <div class="mb-2"><i class="bi bi-check-circle-fill me-2"></i> Booking submitted successfully!</div>
+                    <div>Your booking reference is: <span id="bookingReference" class="booking-reference"></span></div>
+                    <div class="mt-2">We will contact you shortly with confirmation details.</div>
+                </div>
 
-            <div id="errorMessage" class="error-message">
-                Failed to submit booking. Please try again or contact us directly.
-            </div>
+                <div id="errorMessage" class="error-message">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Failed to submit booking. Please try again or contact us directly.
+                </div>
 
-            <!-- Hidden field for Google Sheet script URL -->
-          <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/AKfycbzHKgK6KnpSZRVjC_yvlT3gmxnr8mALDfExVfUpsMj4-SoRKpJKHFuKBxKShtwPUH2ouw/exec">
-        </form>
+
+                <!-- Hidden field for Google Sheet script URL -->
+                <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/AKfycbzHKgK6KnpSZRVjC_yvlT3gmxnr8mALDfExVfUpsMj4-SoRKpJKHFuKBxKShtwPUH2ouw/exec">
+            </form>
+        </div>
     </div>
 
     <!-- Hidden map div (required for Google Maps API to work) -->
     <div id="map"></div>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>About Mayil Taxi</h5>
+                    <p>Mayil Taxi provides comfortable and reliable taxi services in Coimbatore and across Tamil Nadu. We specialize in both one-way drop and multi-day round trip services.</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/919488840240" class="btn rounded-circle" title="WhatsApp" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        <a href="mailto:MayilTaxi@gmail.com" class="btn rounded-circle" title="Email">
+                            <i class="bi bi-envelope"></i>
+                        </a>
+                        <a href="https://maps.app.goo.gl/?q=5A+KRISHNA+SWAMINAGAR+CHINNAMAL+LAYOUT+KK+PUDUR+COIMBATORE+38" class="btn rounded-circle" title="Location" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-geo-alt"></i>
+                        </a>
+                        <a href="https://instagram.com/mayiltaxi" class="btn rounded-circle" title="Instagram" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled footer-contact">
+                        <li>
+                            <i class="bi bi-telephone-fill icon"></i>
+                            <span>9488840240</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-envelope-fill icon"></i>
+                            <span>mayiltaxi@gmail.com</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-geo-alt-fill icon"></i>
+                            <span>5A KRISHNA SWAMINAGAR<br>CHINNAMAL LAYOUT<br>KK PUDUR COIMBATORE 38</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#"><i class="bi bi-chevron-right me-2"></i>Home</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right me-2"></i>Services</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right me-2"></i>Book Now</a></li>
+                        <li><a href="#"><i class="bi bi-chevron-right me-2"></i>Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mayil Taxi. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Your existing script.js file -->
+    <script src="script.js"></script>
+
+    <!-- Additional script for vehicle selection -->
     <script>
-        // Global variables
-        let autocompletePickup;
-        let autocompleteDrop;
-        let directionsService;
-        let map;
-        let distanceInKm = 0;
-        let calculatedFare = false;
+        function selectVehicle(element, id) {
+            // Remove selected class from all options
+            document.querySelectorAll('.vehicle-option').forEach(option => {
+                option.classList.remove('selected');
+            });
 
-        // Set min date for pickup to today
-        const today = new Date();
-        const formattedDate = today.toISOString().slice(0, 16);
-        document.getElementById('pickupDate').min = formattedDate;
+            // Add selected class to clicked option
+            element.classList.add('selected');
 
-        // Set default value to 1 hour from now
-        const oneHourLater = new Date(today.getTime() + (60 * 60 * 1000));
-        document.getElementById('pickupDate').value = oneHourLater.toISOString().slice(0, 16);
+            // Check the radio button
+            document.getElementById(id).checked = true;
+        }
 
-        // Initialize Google Maps services
-        function initMap() {
-            try {
-                // Create map instance (required for the API even if not displayed)
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: 13.0827, lng: 80.2707}, // Default to Chennai
-                    zoom: 2,
-                    disableDefaultUI: true
+        // For trip type buttons
+        document.querySelectorAll('.trip-type .btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.trip-type .btn').forEach(b => {
+                    b.classList.remove('active');
                 });
-
-                // Initialize the Google Places Autocomplete
-                autocompletePickup = new google.maps.places.Autocomplete(
-                    document.getElementById('pickup'),
-                    {types: ['geocode']}
-                );
-
-                autocompleteDrop = new google.maps.places.Autocomplete(
-                    document.getElementById('dropoff'),
-                    {types: ['geocode']}
-                );
-
-                // Initialize the Directions Service
-                directionsService = new google.maps.DirectionsService();
-
-                // Add event listeners
-                document.getElementById('calculate').addEventListener('click', calculateFare);
-                document.getElementById('bookingForm').addEventListener('submit', submitBooking);
-
-                // Add event listeners to vehicle options
-                const vehicleOptions = document.querySelectorAll('.vehicle-option');
-                vehicleOptions.forEach(option => {
-                    option.addEventListener('click', function() {
-                        // Remove selected class from all options
-                        vehicleOptions.forEach(opt => opt.classList.remove('selected'));
-                        // Add selected class to clicked option
-                        this.classList.add('selected');
-                        // Check the radio button
-                        const radio = this.querySelector('input[type="radio"]');
-                        radio.checked = true;
-
-                        // Recalculate fare if distance is available
-                        if (distanceInKm > 0) {
-                            calculateFare();
-                        }
-                    });
-                });
-
-                // Add event listeners to trip type options
-                const tripOptions = document.querySelectorAll('.trip-option');
-                tripOptions.forEach(option => {
-                    option.addEventListener('click', function() {
-                        // Remove selected class from all options
-                        tripOptions.forEach(opt => opt.classList.remove('selected'));
-                        // Add selected class to clicked option
-                        this.classList.add('selected');
-                        // Check the radio button
-                        const tripType = this.getAttribute('data-value');
-                        document.querySelector(`input[value="${tripType}"]`).checked = true;
-
-                        // Recalculate fare if distance is available
-                        if (distanceInKm > 0) {
-                            calculateFare();
-                        }
-                    });
-                });
-            } catch (error) {
-                console.error('Error initializing map:', error);
-                showErrorMessage('Failed to initialize map services. Please refresh the page.');
-            }
-        }
-
-        // Helper function to show error message
-        function showErrorMessage(message) {
-            const errorElement = document.getElementById('errorMessage');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            // Hide success message if it's displayed
-            document.getElementById('successMessage').style.display = 'none';
-            setTimeout(() => {
-                errorElement.style.display = 'none';
-            }, 5000);
-        }
-
-        // Clear all form errors
-        function clearAllErrors() {
-            const errorElements = document.querySelectorAll('.form-error');
-            const inputElements = document.querySelectorAll('input, textarea, select');
-
-            errorElements.forEach(element => {
-                element.textContent = '';
+                this.classList.add('active');
             });
-
-            inputElements.forEach(element => {
-                element.classList.remove('error');
-            });
-        }
-
-        // Reset form completely
-        function resetForm() {
-            document.getElementById('bookingForm').reset();
-            document.getElementById('results').style.display = 'none';
-            calculatedFare = false;
-            clearAllErrors();
-
-            // Reset trip type selection
-            const tripOptions = document.querySelectorAll('.trip-option');
-            tripOptions.forEach(opt => opt.classList.remove('selected'));
-            document.querySelector('.trip-option[data-value="oneway"]').classList.add('selected');
-            document.getElementById('oneway').checked = true;
-
-            // Reset vehicle selection
-            const vehicleOptions = document.querySelectorAll('.vehicle-option');
-            vehicleOptions.forEach(opt => opt.classList.remove('selected'));
-            vehicleOptions[0].classList.add('selected');
-            document.getElementById('hatchback').checked = true;
-
-            // Set default pickup time again
-            const newTime = new Date(Date.now() + (60 * 60 * 1000));
-            document.getElementById('pickupDate').value = newTime.toISOString().slice(0, 16);
-        }
-
-        // Improved validation function
-        function validateForm() {
-            let isValid = true;
-            const required = ['name', 'email', 'phone', 'pickup', 'dropoff', 'pickupDate'];
-            const errors = {};
-
-            // Clear all previous errors
-            clearAllErrors();
-
-            // Check required fields
-            required.forEach(field => {
-                const input = document.getElementById(field);
-                if (!input.value.trim()) {
-                    input.classList.add('error');
-                    const errorElement = document.getElementById(field + 'Error');
-                    if (errorElement) errorElement.textContent = 'This field is required';
-                    isValid = false;
-                    errors[field] = 'required';
-                }
-            });
-
-            // Validate email format
-            const email = document.getElementById('email');
-            if (email.value && !validateEmail(email.value)) {
-                email.classList.add('error');
-                document.getElementById('emailError').textContent = 'Please enter a valid email address';
-                isValid = false;
-                errors.email = 'invalid';
-            }
-
-            // Validate phone number
-            const phone = document.getElementById('phone');
-            if (phone.value && !validatePhone(phone.value)) {
-                phone.classList.add('error');
-                document.getElementById('phoneError').textContent = 'Please enter a valid phone number';
-                isValid = false;
-                errors.phone = 'invalid';
-            }
-
-            // Check if fare was calculated
-            if (!calculatedFare) {
-                showErrorMessage('Please calculate the fare before submitting');
-                isValid = false;
-                errors.fare = 'not_calculated';
-            }
-
-            return { isValid, errors };
-        }
-
-        // Email validation helper
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        // Phone validation helper
-        function validatePhone(phone) {
-            // Basic validation - adjust as needed
-            return phone.length >= 10;
-        }
-
-        // Calculate fare based on trip type, vehicle type and distance
-        function calculateFare() {
-            const pickup = document.getElementById('pickup').value;
-            const dropoff = document.getElementById('dropoff').value;
-
-            // Clear any previous errors
-            clearAllErrors();
-
-            // Validate inputs
-            if (!pickup) {
-                document.getElementById('pickup').classList.add('error');
-                document.getElementById('pickupError').textContent = 'Pickup location is required';
-                return;
-            }
-
-            if (!dropoff) {
-                document.getElementById('dropoff').classList.add('error');
-                document.getElementById('dropoffError').textContent = 'Drop location is required';
-                return;
-            }
-
-            // Show loading state on the calculate button
-            const calculateButton = document.getElementById('calculate');
-            const originalButtonText = calculateButton.textContent;
-            calculateButton.disabled = true;
-            calculateButton.innerHTML = '<span class="loading-spinner"></span>Calculating...';
-
-            const request = {
-                origin: pickup,
-                destination: dropoff,
-                travelMode: google.maps.TravelMode.DRIVING
-            };
-
-            directionsService.route(request, function(response, status) {
-                // Reset button state
-                calculateButton.disabled = false;
-                calculateButton.textContent = originalButtonText;
-
-                if (status === 'OK') {
-                    // Get the route
-                    const route = response.routes[0];
-
-                    // Extract distance information
-                    distanceInKm = route.legs[0].distance.value / 1000;
-                    const durationMin = route.legs[0].duration.value / 60;
-
-                    // Get selected vehicle type and trip type
-                    const vehicleType = document.querySelector('input[name="vehicleType"]:checked').value;
-                    const tripType = document.querySelector('input[name="tripType"]:checked').value;
-
-                    // Calculate fare based on vehicle type
-                    let ratePerKm = 0;
-                    switch(vehicleType) {
-                        case 'hatchback':
-                            ratePerKm = 13;
-                            break;
-                        case 'sedan':
-                            ratePerKm = 14;
-                            break;
-                        case 'ertiga':
-                            ratePerKm = 18;
-                            break;
-                        case 'crysta':
-                            ratePerKm = 20;
-                            break;
-                    }
-
-                    let estimatedFare = 0;
-
-                    // Adjust fare based on trip type
-                    switch(tripType) {
-                        case 'oneway':
-                            estimatedFare = distanceInKm * ratePerKm;
-                            break;
-                        case 'round':
-                            estimatedFare = distanceInKm * 2 * ratePerKm;
-                            break;
-                        case 'rental':
-                            // For rental, minimum 4 hours and we'll estimate 40km per 4 hours
-                            const hours = Math.max(4, Math.ceil(durationMin / 60));
-                            const estimatedTotalKm = Math.max(40, distanceInKm);
-                            estimatedFare = estimatedTotalKm * ratePerKm;
-                            break;
-                    }
-
-                    // Display results
-                    document.getElementById('distanceResult').textContent = distanceInKm.toFixed(2) + ' km';
-                    document.getElementById('durationResult').textContent = Math.round(durationMin) + ' minutes';
-                    document.getElementById('fareEstimation').textContent = '₹' + Math.round(estimatedFare);
-                    document.getElementById('results').style.display = 'block';
-
-                    // Store for form submission
-                    document.getElementById('distanceKm').value = distanceInKm.toFixed(2);
-                    document.getElementById('estimatedFare').value = Math.round(estimatedFare);
-
-                    // Mark that fare was calculated
-                    calculatedFare = true;
-                } else {
-                    // Handle specific error cases
-                    let errorMessage = 'Could not calculate route. Please check your locations and try again.';
-
-                    if (status === 'ZERO_RESULTS') {
-                        errorMessage = 'No route found between these locations. Please check and try again.';
-                    } else if (status === 'NOT_FOUND') {
-                        errorMessage = 'One or both locations could not be found. Please check the spelling.';
-                    }
-
-                    showErrorMessage(errorMessage);
-                }
-            });
-        }
-
-        // Submit booking to Google Sheets
-        function submitBooking(e) {
-            e.preventDefault();
-
-            // Hide any previous messages
-            document.getElementById('successMessage').style.display = 'none';
-            document.getElementById('errorMessage').style.display = 'none';
-
-            // Validate form
-            const { isValid, errors } = validateForm();
-            if (!isValid) {
-                return;
-            }
-
-            // Get form data
-            const formData = new FormData(document.getElementById('bookingForm'));
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-
-            // Get Google Sheets script URL
-            const scriptURL = document.getElementById('scriptUrl').value;
-            if (!scriptURL) {
-                showErrorMessage('Missing Google Apps Script URL. Please set up your script URL first.');
-                return;
-            }
-
-            // Show loading state
-            const submitButton = document.getElementById('submitButton');
-            const originalButtonText = submitButton.textContent;
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<span class="loading-spinner"></span>Submitting...';
-
-            // Generate a booking reference number
-            const bookingRef = generateBookingReference();
-            data.bookingReference = bookingRef;
-
-            // Send data to Google Sheets
-            fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                mode: 'no-cors' // Required for cross-origin requests
-            })
-            .then(() => {
-                // With no-cors mode, we can't actually read the response status
-                // So we'll assume success (the actual data is being stored in the sheet)
-
-                // Show success message with booking reference
-                document.getElementById('bookingReference').textContent = bookingRef;
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('errorMessage').style.display = 'none';
-
-                // Reset form completely (including errors and selections)
-                resetForm();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('successMessage').style.display = 'none';
-                document.getElementById('errorMessage').textContent = 'Failed to submit booking. Please try again or contact us directly.';
-            })
-            .finally(() => {
-                // Reset button state
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalButtonText;
-            });
-        }
-
-        // Generate a booking reference number
-        function generateBookingReference() {
-            const prefix = 'MT';
-            const timestamp = new Date().getTime().toString().slice(-6);
-            const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-            return `${prefix}${timestamp}${random}`;
-        }
-
-        // Load Google Maps API with error handling
-        function loadGoogleMapsAPI() {
-            const script = document.createElement('script');
-            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBTm8unNAZY-We3a05qozpJMPgPJFvKk-8&libraries=places&callback=initMap';
-            script.async = true;
-            script.defer = true;
-            script.onerror = function() {
-                console.error('Failed to load Google Maps API');
-                showErrorMessage('Failed to load map services. Please refresh the page or try again later.');
-            };
-            document.body.appendChild(script);
-        }
-
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', function() {
-            loadGoogleMapsAPI();
         });
     </script>
 </body>
