@@ -306,6 +306,23 @@
                     </div>
                 </div>
 
+                <!--New fields -->
+
+
+  <!-- Return Date Field -->
+  <div class="mb-3" id="dropDateContainer" style="display: none;">
+      <label for="dropDate" class="form-label">Return Date & Time*</label>
+      <input type="datetime-local" class="form-control" id="dropDate" name="dropDate">
+      <div class="invalid-feedback" id="dropDateError"></div>
+  </div>
+
+  <!-- Inside the results section, replace the round-trip-details div -->
+  <div class="col-md-6 round-trip-details" style="display: none;">
+      <p><strong>Total Days:</strong> <span id="totalDaysResult"></span></p>
+      <input type="hidden" id="totalDays" name="totalDays">
+      <!-- The JavaScript will automatically create a 'numDays' hidden input for compatibility -->
+  </div>
+
                 <div class="mb-4">
                     <label for="note" class="form-label">Special Instructions</label>
                     <textarea class="form-control" id="note" name="note" rows="3" placeholder="Any special instructions or requirements"></textarea>
@@ -391,19 +408,23 @@
                     <button type="submit" id="submitButton" class="btn btn-submit btn-lg">Submit Booking</button>
   </div>
 
-                <div id="successMessage" class="success-message">
-                    <div class="mb-2"><i class="bi bi-check-circle-fill me-2"></i> Booking submitted successfully!</div>
-                    <div>Your booking reference is: <span id="bookingReference" class="booking-reference"></span></div>
-                    <div class="mt-2">We will contact you shortly with confirmation details.</div>
-                </div>
+  <!-- Success message container - Modified to include booking details -->
+<div id="successMessage" class="alert alert-success mt-4" style="display: none;">
+<h4 class="alert-heading">Booking Successful!</h4>
+<p>Your taxi booking has been confirmed. Your booking reference is: <strong id="bookingReference"></strong></p>
+<div id="bookingDetails" class="mt-3">
+<!-- Booking details will be populated here -->
+</div>
+<hr>
+<p class="mb-0">Thank you for choosing Mayil Taxi. We will contact you shortly to confirm your booking details.</p>
+</div>
 
-                <div id="errorMessage" class="error-message">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Failed to submit booking. Please try again or contact us directly.
-                </div>
+<!-- Error message container - remains the same -->
+<div id="errorMessage" class="alert alert-danger mt-4" style="display: none;"></div>
 
 
                 <!-- Hidden field for Google Sheet script URL -->
-                <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/AKfycbzHKgK6KnpSZRVjC_yvlT3gmxnr8mALDfExVfUpsMj4-SoRKpJKHFuKBxKShtwPUH2ouw/exec">
+                <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/AKfycbyEgZJ5ZqeCgfcvc1RR8swFw_49BRu4HU3fm9-b5SyRDKG03KANXlKSwdd25oeKy0Dz/exec">
             </form>
         </div>
     </div>
