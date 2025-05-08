@@ -353,9 +353,53 @@
   .animate-bounce {
       animation: bounce 0.5s ease;
   }
+  .navbar-links .nav-link {
+      color: #dee2e6;
+      text-decoration: none;
+      transition: all 0.3s;
+  }
+
+  .navbar-links .nav-link:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+  }
+
+  .navbar-links .nav-item {
+      margin: 0 10px;
+  }
+
+  .navbar .bi-chevron-right {
+      color: var(--primary);
+  }
     </style>
 </head>
 <body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="Mayiltaxifont.png" alt="Mayil Taxi Logo" height="40">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto navbar-links">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html"><i class="bi bi-chevron-right me-2"></i>Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html"><i class="bi bi-chevron-right me-2"></i>Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html"><i class="bi bi-chevron-right me-2"></i>Book Now</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- LOGO -->
   <div class="container mt-4">
        <div class="logo-container">
            <img src="1.png" alt="Mayil Taxi Logo" class="img-fluid">
@@ -381,14 +425,14 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        
+
                         <input type="text" class="form-control" id="pickup" name="pickup" required placeholder="Enter pickup location">
                         <div class="invalid-feedback" id="pickupError"></div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        
+
                         <input type="text" class="form-control" id="dropoff" name="dropoff" required placeholder="Enter drop location">
                         <div class="invalid-feedback" id="dropoffError"></div>
                     </div>
@@ -411,7 +455,7 @@
                         <div class="vehicle-text">
                             <label class="form-check-label fw-bold" for="hatchback">4+1 Hatchback</label>
                         </div>
-                        <img src="Hatchback.png" class="taxi-png" alt="Hatchback Icon">
+                        <img src="hatchback.png" class="taxi-png" alt="Hatchback Icon">
                         <div class="vehicle-rate">₹13/km</div>
                     </div>
                 </div>
@@ -624,7 +668,6 @@
                         <li><a href="#"><i class="bi bi-chevron-right me-2"></i>Home</a></li>
                         <li><a href="#"><i class="bi bi-chevron-right me-2"></i>Services</a></li>
                         <li><a href="#"><i class="bi bi-chevron-right me-2"></i>Book Now</a></li>
-                        
                     </ul>
                 </div>
             </div>
