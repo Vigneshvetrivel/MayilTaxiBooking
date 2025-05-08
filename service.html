@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mayil Taxi - Services</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="1.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #ffbf00;
+            --secondary: #212529;
+            --light-gray: #f8f9fa;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar-brand img {
+            max-height: 50px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .logo-container img {
+            max-height: 250px;
+        }
+
+        /* Services Page Specific Styles */
+        .services-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .service-item {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            background-color: #f8f9fa;
+        }
+
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+
+        .why-choose-box {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .why-choose-box:hover {
+            border-bottom: 3px solid var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .why-choose-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .special-service {
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .special-service:hover {
+            background-color: var(--light-gray);
+            transform: scale(1.02);
+        }
+
+        .special-service-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: inline-block;
+            padding: 15px;
+            border-radius: 50%;
+            background-color: rgba(255, 191, 0, 0.1);
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .service-tag {
+            display: inline-block;
+            background-color: rgba(255, 191, 0, 0.2);
+            color: var(--secondary);
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .footer h5 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-social .btn {
+            background-color: #343a40;
+            color: white;
+            margin-right: 5px;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-social .btn:hover {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+
+        .footer-contact li {
+            margin-bottom: 15px;
+        }
+
+        .footer-contact .icon {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .footer-links a {
+            color: #dee2e6;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #adb5bd;
+        }
+
+        .floating-icons {
+            position: fixed;
+            top: 80%;
+            right: 5%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .floating-icons .icon {
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            padding: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .floating-icons .icon img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .floating-icons .icon:hover {
+            transform: scale(1.2) translateX(-10px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .navbar-links .nav-link {
+            color: #dee2e6;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .navbar-links .nav-link:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .navbar-links .nav-item {
+            margin: 0 10px;
+        }
+
+        .navbar .bi-chevron-right {
+            color: var(--primary);
+        }
+
+        .cta-btn {
+            background-color: var(--primary);
+            color: var(--secondary);
+            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 30px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .cta-btn:hover {
+            background-color: var(--secondary);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 767.98px) {
+            .services-container {
+                padding: 20px;
+            }
+
+            .footer-section {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="Mayiltaxifont.png" alt="Mayil Taxi Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto navbar-links">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="bi bi-chevron-right me-2"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="services.html"><i class="bi bi-chevron-right me-2"></i>Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="bi bi-chevron-right me-2"></i>Book Now</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- LOGO -->
+    <div class="container mt-4">
+        <div class="logo-container">
+            <img src="1.png" alt="Mayil Taxi Logo" class="img-fluid">
+        </div>
+
+        <!-- Services Section -->
+        <div class="services-container">
+            <h2 class="section-title">Our Services</h2>
+            <p class="text-center mb-5">Ride with Confidence and Comfort across Tamil Nadu</p>
+
+            <div class="row">
+                <!-- One-Way Drop Taxi -->
+                <div class="col-md-6 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="bi bi-arrow-right-circle"></i>
+                        </div>
+                        <span class="service-tag">AFFORDABLE</span>
+                        <h3>One-Way Drop Taxi</h3>
+                        <p>Travel from one city to another at affordable rates. Perfect for intercity transfers without paying for a round trip.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Fixed prices starting from ₹13/km</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>No return fare</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Available 24/7</li>
+                        </ul>
+                        <a href="index.html" class="cta-btn">Book One-Way Trip</a>
+                    </div>
+                </div>
+
+                <!-- Round Trip Taxi -->
+                <div class="col-md-6 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </div>
+                        <span class="service-tag">FLEXIBLE</span>
+                        <h3>Round Trip Taxi</h3>
+                        <p>Planning to return the same day or stay for a few days? Our round-trip service is cost-effective and reliable.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Customizable durations</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Hill station and multi-day trips available</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Transparent billing</li>
+                        </ul>
+                        <a href="index.html" class="cta-btn">Book Round Trip</a>
+                    </div>
+                </div>
+
+                <!-- Airport Transfers -->
+                <div class="col-md-6 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="bi bi-airplane"></i>
+                        </div>
+                        <span class="service-tag">PUNCTUAL</span>
+                        <h3>Airport Transfers</h3>
+                        <p>We provide timely and reliable pick-up and drop-off to and from Coimbatore International Airport.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>24/7 airport taxi availability</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Flight tracking for timely service</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Clean, air-conditioned vehicles</li>
+                        </ul>
+                        <a href="index.html" class="cta-btn">Book Airport Transfer</a>
+                    </div>
+                </div>
+
+                <!-- Local & Outstation Tours -->
+                <div class="col-md-6 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="bi bi-map"></i>
+                        </div>
+                        <span class="service-tag">EXPLORATIVE</span>
+                        <h3>Local & Outstation Tours</h3>
+                        <p>Whether it's a temple tour, hill station trip, or business visit, we've got your travel covered.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Coimbatore to Ooty, Valparai, Tiruvannamalai, and more</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Full-day and multi-day packages</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Friendly, experienced drivers</li>
+                        </ul>
+                        <a href="index.html" class="cta-btn">Book Tour</a>
+                    </div>
+                </div>
+
+                <!-- Family & Group Travel -->
+                <div class="col-md-6 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <span class="service-tag">SPACIOUS</span>
+                        <h3>Family & Group Travel</h3>
+                        <p>Spacious vehicles like Innova Crysta and Ertiga available for family or group travel.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>6+1 and 7+1 seater options</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Comfortable for long journeys</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Extra luggage space</li>
+                        </ul>
+                        <a href="index.html" class="cta-btn">Book Group Travel</a>
+                    </div>
+                </div>
+
+                <!-- Corporate & Business Travel -->
+                <div class="col-md-6 mb-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+                        <span class="service-tag">PROFESSIONAL</span>
+                        <h3>Corporate & Business Travel</h3>
+                        <p>Hassle-free travel for your employees or clients with professional-grade services.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Monthly billing options</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Dedicated account manager</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>On-time pickups and invoicing</li>
+                        </ul>
+                        <a href="index.html" class="cta-btn">Book Business Travel</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Choose Us Section -->
+            <h2 class="section-title mt-5">Why Choose Mayil Taxi?</h2>
+            <div class="row mt-4">
+                <!-- Transparent Pricing -->
+                <div class="col-md-4 mb-4">
+                    <div class="why-choose-box">
+                        <div class="why-choose-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                        <h4>Transparent Pricing</h4>
+                        <p>No hidden charges. You pay only for what you use—with fare breakdowns clearly explained before you book.</p>
+                    </div>
+                </div>
+
+                <!-- Wide Range of Vehicles -->
+                <div class="col-md-4 mb-4">
+                    <div class="why-choose-box">
+                        <div class="why-choose-icon">
+                            <i class="bi bi-car-front"></i>
+                        </div>
+                        <h4>Wide Range of Vehicles</h4>
+                        <p>From compact hatchbacks to luxury SUVs, we offer clean, well-maintained vehicles to match your travel needs and budget.</p>
+                    </div>
+                </div>
+
+                <!-- On-Time Every Time -->
+                <div class="col-md-4 mb-4">
+                    <div class="why-choose-box">
+                        <div class="why-choose-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <h4>On-Time Every Time</h4>
+                        <p>Punctuality is our promise. Our GPS-enabled tracking ensures your taxi reaches you without delay.</p>
+                    </div>
+                </div>
+
+                <!-- Experienced Drivers -->
+                <div class="col-md-4 mb-4">
+                    <div class="why-choose-box">
+                        <div class="why-choose-icon">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+                        <h4>Experienced Drivers</h4>
+                        <p>All our drivers are verified, background-checked, familiar with Tamil Nadu's routes and highways, and maintain professional conduct.</p>
+                    </div>
+                </div>
+
+                <!-- Safe & Secure Rides -->
+                <div class="col-md-4 mb-4">
+                    <div class="why-choose-box">
+                        <div class="why-choose-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h4>Safe & Secure Rides</h4>
+                        <p>We prioritize your safety with 24/7 customer support, real-time ride tracking, and emergency contact features.</p>
+                    </div>
+                </div>
+
+                <!-- Stop & Customize -->
+                <div class="col-md-4 mb-4">
+                    <div class="why-choose-box">
+                        <div class="why-choose-icon">
+                            <i class="bi bi-sliders"></i>
+                        </div>
+                        <h4>Stop & Customize</h4>
+                        <p>Need to stop en route for food or a photo? No problem. Our flexible service adapts to your preferences.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Special Services Section -->
+            <h2 class="section-title mt-5">Special Services</h2>
+            <div class="row mt-4">
+                <!-- Hill Station Trips -->
+                <div class="col-md-6 mb-4">
+                    <div class="special-service">
+                        <div class="special-service-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <h4>Hill Station Trips</h4>
+                        <p>Book stress-free rides to Ooty, Kodaikanal, Yercaud, Valparai, or any scenic spot in Tamil Nadu.</p>
+                        <p>Our drivers are experienced with hill roads and ensure a safe, comfortable journey.</p>
+                    </div>
+                </div>
+
+                <!-- Event & Wedding Travel -->
+                <div class="col-md-6 mb-4">
+                    <div class="special-service">
+                        <div class="special-service-icon">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                        <h4>Event & Wedding Travel</h4>
+                        <p>Planning a family event? We offer:</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Multiple vehicles for guest pickups</li>
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Coordinated timings</li>
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Custom itinerary support</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Medical Travel Support -->
+                <div class="col-md-6 mb-4">
+                    <div class="special-service">
+                        <div class="special-service-icon">
+                            <i class="bi bi-hospital"></i>
+                        </div>
+                        <h4>Medical Travel Support</h4>
+                        <p>Need transport for medical visits or treatments?</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Doorstep pickup and return</li>
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Wait-and-return options</li>
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Safe, smooth travel for elderly passengers</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Senior Citizen Friendly -->
+                <div class="col-md-6 mb-4">
+                    <div class="special-service">
+                        <div class="special-service-icon">
+                            <i class="bi bi-person-heart"></i>
+                        </div>
+                        <h4>Senior Citizen Friendly</h4>
+                        <p>We're attentive to older passengers:</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Smooth pickup assistance</li>
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Adjustable seating</li>
+                            <li><i class="bi bi-check-circle text-warning me-2"></i>Patient and courteous drivers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="text-center mt-5 mb-3">
+                <h3>Ready to Book Your Ride?</h3>
+                <p class="mb-4">Experience the comfort and reliability of Mayil Taxi services</p>
+                <a href="index.html" class="cta-btn"><i class="bi bi-car-front-fill me-2"></i>Book Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>About Mayil Taxi</h5>
+                    <p>Mayil Taxi provides comfortable and reliable taxi services in Coimbatore and across Tamil Nadu. We specialize in both one-way drop and multi-day round trip services.</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/919488840332" class="btn rounded-circle" title="WhatsApp" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        <a href="mailto:MayilTaxi@gmail.com" class="btn rounded-circle" title="Email">
+                            <i class="bi bi-envelope"></i>
+                        </a>
+                        <a href="https://maps.app.goo.gl/?q=5A+KRISHNA+SWAMINAGAR+CHINNAMAL+LAYOUT+KK+PUDUR+COIMBATORE+38" class="btn rounded-circle" title="Location" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-geo-alt"></i>
+                        </a>
+                        <a href="https://instagram.com/mayiltaxi" class="btn rounded-circle" title="Instagram" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled footer-contact">
+                        <li>
+                            <i class="bi bi-telephone-fill icon"></i>
+                            <span>9488840332</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-envelope-fill icon"></i>
+                            <span>mayiltaxi@gmail.com</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-geo-alt-fill icon"></i>
+                            <span>5A KRISHNA SWAMINAGAR<br>CHINNAMAL LAYOUT<br>KK PUDUR COIMBATORE 38</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="index.html"><i class="bi bi-chevron-right me-2"></i>Home</a></li>
+                        <li><a href="services.html"><i class="bi bi-chevron-right me-2"></i>Services</a></li>
+                        <li><a href="index.html"><i class="bi bi-chevron-right me-2"></i>Book Now</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mayil Taxi. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Contact Icons -->
+    <div class="floating-icons">
+        <a href="https://wa.me/919488840240" target="_blank" class="icon whatsapp" title="WhatsApp">
+            <img src="https://img.icons8.com/ios-filled/50/25D366/whatsapp.png" alt="WhatsApp">
+        </a>
+        <a href="https://www.instagram.com/your_instagram" target="_blank" class="icon instagram" title="Instagram">
+            <img src="https://img.icons8.com/ios-filled/50/E1306C/instagram-new.png" alt="Instagram">
+        </a>
+        <a href="tel:+919488840240" class="icon call" title="Call">
+            <img src="https://img.icons8.com/ios-filled/50/000000/phone.png" alt="Call">
+        </a>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
