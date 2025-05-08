@@ -289,21 +289,28 @@
   /* Add these styles to your existing CSS in the <style> section of your HTML */
 
   .vehicle-options {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
       margin-top: 15px;
   }
 
   .vehicle-option {
       border: 2px solid #dee2e6;
       border-radius: 10px;
-      padding: 15px;
+      padding: 10px;
       cursor: pointer;
       transition: transform 0.2s ease, border-color 0.3s ease;
-      width: calc(50% - 10px);
-      max-width: 220px;
+  }
+
+  @media (min-width: 768px) {
+      .vehicle-options {
+          grid-template-columns: repeat(4, 1fr);
+      }
+
+      .vehicle-option {
+          padding: 15px;
+      }
   }
 
   .vehicle-option:hover {
@@ -422,7 +429,7 @@
     <form id="bookingForm">
         <!-- Step 1: Trip Type -->
         <div class="mb-4">
-            <label class="form-label fw-bold">1. Trip Type</label>
+            <label class="form-label fw-bold"><i class="bi bi-signpost-2-fill me-2"></i>Trip Type</label>
             <div class="trip-type btn-group w-100" role="group">
                 <input type="radio" class="btn-check" name="tripType" id="drop" value="drop" checked>
                 <label class="btn btn-outline-primary active" for="drop">Drop Trip</label>
@@ -434,7 +441,7 @@
 
         <!-- Step 2: Pickup & Drop Location -->
         <div class="mb-4">
-            <label class="form-label fw-bold">2. Pickup & Drop Location</label>
+            <label class="form-label fw-bold"><i class="bi bi-geo-alt-fill me-2"></i>Pickup & Drop Location</label>
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
@@ -457,7 +464,7 @@
         <!-- Step 3: Vehicle Type -->
 
     <div class="mb-4">
-        <label class="form-label fw-bold">3. Vehicle Type*</label>
+        <label class="form-label fw-bold"><i class="bi bi-car-front-fill me-2"></i>Vehicle Type</label>
 
         <div class="vehicle-options">
             <!-- Hatchback Option -->
@@ -520,7 +527,7 @@
 
         <!-- Step 4: Calculate Fare -->
         <div class="mb-4">
-            <label class="form-label fw-bold">4. Estimate Fare</label>
+            <label class="form-label fw-bold"><i class="bi bi-calculator-fill me-2"></i>Estimate Fare</label>
             <div class="d-grid gap-2">
                 <button type="button" id="calculate" class="btn btn-calculate btn-lg">Calculate Fare</button>
             </div>
@@ -651,7 +658,7 @@
                     <a href="https://maps.app.goo.gl/?q=5A+KRISHNA+SWAMINAGAR+CHINNAMAL+LAYOUT+KK+PUDUR+COIMBATORE+38" class="btn rounded-circle" title="Location" target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-geo-alt"></i>
                     </a>
-                    <a href="https://instagram.com/mayiltaxi" class="btn rounded-circle" title="Instagram" target="_blank" rel="noopener noreferrer">
+                    <a href="#" class="btn rounded-circle" title="Instagram" target="_blank" rel="noopener noreferrer">
                         <i class="bi bi-instagram"></i>
                     </a>
                 </div>
@@ -670,7 +677,7 @@
                     </li>
                     <li>
                         <i class="bi bi-geo-alt-fill icon"></i>
-                        <span>5A KRISHNA SWAMINAGAR<br>CHINNAMAL LAYOUT<br>KK PUDUR COIMBATORE 38</span>
+                        <span>MADURAI & COIMBATORE</span>
                     </li>
                 </ul>
             </div>
@@ -771,7 +778,7 @@ function selectVehicle(element, id) {
   <a href="https://wa.me/919488840240" target="_blank" class="icon whatsapp" title="WhatsApp">
     <img src="https://img.icons8.com/ios-filled/50/25D366/whatsapp.png" alt="WhatsApp">
   </a>
-  <a href="https://www.instagram.com/your_instagram" target="_blank" class="icon instagram" title="Instagram">
+  <a href="#" target="_blank" class="icon instagram" title="Instagram">
     <img src="https://img.icons8.com/ios-filled/50/E1306C/instagram-new.png" alt="Instagram">
   </a>
   <a href="tel:+919488840240" class="icon call" title="Call">
