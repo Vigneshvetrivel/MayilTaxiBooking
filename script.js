@@ -659,7 +659,7 @@ function submitBooking(e) {
     console.log("Form data collected:", jsonData);
 
     // Use the provided Google Apps Script URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyEgZJ5ZqeCgfcvc1RR8swFw_49BRu4HU3fm9-b5SyRDKG03KANXlKSwdd25oeKy0Dz/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyyaB_tRHlT2q-lSOYXqWaH5sRjMLSp10KO7LA-_x50umNRvDM_J2yQ-HpEmmNXIyg/exec';
 
     // Show loading state
     const submitButton = document.getElementById('submitButton');
@@ -835,7 +835,7 @@ function submitBooking(e) {
     console.log("Form data collected:", jsonData);
 
     // Use the provided Google Apps Script URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbybNHCN1saHVQ3M1cC1knJLF0vPfGg8j5hJA8TteeI6P7A_rQueBnmvTqv3F1k5W5Y/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzDG_nUjxCShmYAcOZ4-PMRZ696PgOHnKpsm4JFGuitZgRqS5XbRpf07ZmTUW-ul4pP/exec';
 
     // Show loading state
     const submitButton = document.getElementById('submitButton');
