@@ -429,15 +429,18 @@
     <form id="bookingForm">
         <!-- Step 1: Trip Type -->
         <div class="mb-4">
-            <label class="form-label fw-bold"><i class="bi bi-signpost-2-fill me-2"></i>Trip Type</label>
-            <div class="trip-type btn-group w-100" role="group">
-                <input type="radio" class="btn-check" name="tripType" id="drop" value="drop" checked>
-                <label class="btn btn-outline-primary active" for="drop">Drop Trip</label>
+      <label class="form-label fw-bold"><i class="bi bi-signpost-2-fill me-2"></i>Trip Type</label>
+      <div class="trip-type btn-group w-100" role="group">
+          <input type="radio" class="btn-check" name="tripType" id="drop" value="drop" checked>
+          <label class="btn btn-outline-primary active" for="drop">Drop Trip</label>
 
-                <input type="radio" class="btn-check" name="tripType" id="round" value="round">
-                <label class="btn btn-outline-primary" for="round">Round Trip</label>
-            </div>
-        </div>
+          <input type="radio" class="btn-check" name="tripType" id="round" value="round">
+          <label class="btn btn-outline-primary" for="round">Round Trip</label>
+
+          <input type="radio" class="btn-check" name="tripType" id="package" value="package">
+          <label class="btn btn-outline-primary" for="package">Package Trip</label>
+      </div>
+  </div>
 
         <!-- Step 2: Pickup & Drop Location -->
         <div class="mb-4">
@@ -634,7 +637,7 @@
         <div id="errorMessage" class="alert alert-danger mt-4" style="display: none;"></div>
 
         <!-- Hidden field for Google Sheet script URL -->
-        <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/AKfycbyEgZJ5ZqeCgfcvc1RR8swFw_49BRu4HU3fm9-b5SyRDKG03KANXlKSwdd25oeKy0Dz/exec">
+        <input type="hidden" id="scriptUrl" name="scriptUrl" value="https://script.google.com/macros/s/AKfycbxtfFsIakKgcbBJFc56ieyH5Q_J1SUr2ek7JrJSiWbFBff6ME2DZZ_f8IqsgfHaLKZ_/exec">
     </form>
 </div>
 
@@ -772,6 +775,19 @@ function selectVehicle(element, id) {
                 this.classList.add('active');
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Get the package trip radio button
+    const packageRadio = document.getElementById('package');
+
+    // Add change event listener
+    packageRadio.addEventListener('change', function() {
+        if (this.checked) {
+            // Redirect to package.html when Package Trip is selected
+            window.location.href = 'package.html';
+        }
+    });
+});
     </script>
 
     <div class="floating-icons">
