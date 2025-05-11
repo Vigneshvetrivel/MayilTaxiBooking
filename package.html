@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mayil Taxi - Package Trip</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="1.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="package.css">
+</head>
+<body>
+
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="Mayiltaxifont.png" alt="Mayil Taxi Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto navbar-links">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="bi bi-chevron-right me-2"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="service.html"><i class="bi bi-chevron-right me-2"></i>Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="bi bi-chevron-right me-2"></i>Book Now</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- LOGO -->
+    <div class="container mt-4">
+        <div class="logo-container">
+            <img src="1.png" alt="Mayil Taxi Logo" class="img-fluid">
+        </div>
+
+        <!-- Step 1: Trip Type -->
+        <div class="mb-4">
+        <label class="form-label fw-bold"><i class="bi bi-signpost-2-fill me-2"></i>Trip Type</label>
+        <div class="trip-type btn-group w-100" role="group">
+            <a href="index.html#drop" id="dropBtn" class="btn" style="background-color: white; color: #495057; border: 2px solid #dee2e6; transition: all 0.3s;">Drop Trip</a>
+            <a href="index.html#round" id="roundBtn" class="btn" style="background-color: white; color: #495057; border: 2px solid #dee2e6; transition: all 0.3s;">Round Trip</a>
+            <a href="#" id="packageBtn" class="btn" style="background-color: #ffc107; color: #212529; border: 2px solid #dee2e6; transition: all 0.3s;">Package Trip</a>
+        </div>
+    </div>
+
+
+        <!-- Distance Calculator Container -->
+        <div class="booking-container">
+            <h2 class="mb-4"><i class="bi bi-geo-alt-fill me-2"></i>Package Trip</h2>
+
+            <div class="row mb-4">
+      <div class="col-md-6">
+          <div class="mb-3">
+              <label for="pickup" class="form-label fw-bold">Pickup Location:</label>
+              <input type="text" class="form-control" id="pickup" placeholder="Enter pickup location">
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="mb-3">
+              <label for="destination" class="form-label fw-bold">Destination:</label>
+              <input type="text" class="form-control" id="destination" placeholder="Enter destination">
+          </div>
+      </div>
+  </div>
+  <div class="row mb-3">
+      <div class="col-md-6">
+          <label for="pickup-datetime" class="form-label">Pickup Date & Time*</label>
+          <input type="datetime-local" class="form-control" id="pickup-datetime" required>
+      </div>
+      <div class="col-md-6">
+          <label for="drop-date" class="form-label">Drop Date*</label>
+          <input type="date" class="form-control" id="drop-date" required>
+      </div>
+  </div>
+  <!-- Add this new section for waypoints -->
+  <div id="waypoints-container">
+      <!-- Waypoints will be added here dynamically -->
+  </div>
+
+  <!-- Replace the current buttons with these -->
+  <center>
+<div class="d-grid gap-2 d-md-block mb-4">
+    <button id="add-waypoint" class="btn btn-calculate me-md-2"><i class="bi bi-plus-circle me-2"></i>Add Intermediate Stop</button>
+
+    <button id="reset" class="btn btn-reset"><i class="bi bi-arrow-repeat me-2"></i>Reset</button>
+</div>
+</center>
+
+<!-- Vehicle Type Selection (Add this section) -->
+<div class="mb-4">
+    <label class="form-label fw-bold"><i class="bi bi-car-front-fill me-2"></i>Vehicle Type</label>
+
+    <div class="vehicle-options">
+        <!-- Hatchback Option -->
+        <div class="vehicle-option selected" onclick="selectVehicle(this, 'hatchback')">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="vehicleType" id="hatchback" value="hatchback" checked>
+                <div class="vehicle-info">
+                    <div class="vehicle-text">
+                        <label class="form-check-label fw-bold" for="hatchback">4+1 Hatchback</label>
+                    </div>
+                    <img src="Hatchback.png" class="taxi-png" alt="Hatchback Icon">
+                    <div class="vehicle-rate">₹13/km</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sedan Option -->
+        <div class="vehicle-option" onclick="selectVehicle(this, 'sedan')">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="vehicleType" id="sedan" value="sedan">
+                <div class="vehicle-info">
+                    <div class="vehicle-text">
+                        <label class="form-check-label fw-bold" for="sedan">4+1 Sedan</label>
+                    </div>
+                    <img src="Sedan.png" class="taxi-png" alt="Sedan Icon">
+                    <div class="vehicle-rate">₹14/km</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ertiga Option -->
+        <div class="vehicle-option" onclick="selectVehicle(this, 'ertiga')">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="vehicleType" id="ertiga" value="ertiga">
+                <div class="vehicle-info">
+                    <div class="vehicle-text">
+                        <label class="form-check-label fw-bold" for="ertiga">6+1 Ertiga/Rumion</label>
+                    </div>
+                    <img src="SUV.png" class="taxi-png" alt="Ertiga Icon">
+                    <div class="vehicle-rate">₹18/km</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Innova/Crysta Option -->
+        <div class="vehicle-option" onclick="selectVehicle(this, 'crysta')">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="vehicleType" id="crysta" value="crysta">
+                <div class="vehicle-info">
+                    <div class="vehicle-text">
+                        <label class="form-check-label fw-bold" for="crysta">7+1 Innova</label>
+                    </div>
+                    <img src="SUV.png" class="taxi-png" alt="Innova Icon">
+                    <div class="vehicle-rate">₹20/km</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estimate Fate -->
+
+<br>
+<center>
+<div class="d-grid gap-2 d-md-block mb-4 ">
+    <button id="calculate" class="btn btn-calculate me-md-2 "><i class="bi bi-calculator-fill me-2"></i>Estimate Fare</button>
+</div>
+</center>
+
+<br>
+            <!-- Map Container -->
+            <div id="map"></div>
+
+            <!-- Results Section -->
+            <div id="results" class="results" style="display: none;">
+                <h4 class="mb-3">Route Details</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>From:</strong> <span id="from-address"></span></p>
+                        <p><strong>To:</strong> <span id="to-address"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Distance:</strong> <span id="total-distance"></span></p>
+                        <p><strong>Estimated Duration:</strong> <span id="total-duration"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add this after the fare estimation section in the calculateRoute function -->
+            <br>
+            <div class="text-center mt-3">
+                <button id="book-now" class="btn btn-calculate me-md-2">
+                    <i class="bi bi-calendar-plus me-2"></i>Book Now
+                </button>
+            </div>
+            <br>
+            <!-- Add this HTML form right after the "Journey Summary" section in your results display -->
+            <div id="booking-form-container" class="mt-4" style="display: none;">
+      <div class="booking-form p-4" style="background-color: #f8f9fa; border-radius: 10px; border-left: 4px solid var(--primary);">
+          <h4><i class="bi bi-calendar-check me-2"></i>Book Your Package Trip</h4>
+          <form id="booking-form">
+              <div class="row mb-3">
+                  <div class="col-md-6">
+                      <label for="customer-name" class="form-label">Name*</label>
+                      <input type="text" class="form-control" id="customer-name" required>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="customer-phone" class="form-label">Phone Number*</label>
+                      <input type="tel" class="form-control" id="customer-phone" required>
+                  </div>
+              </div>
+              <div class="row mb-3">
+                  <div class="col-md-6">
+                      <label for="customer-email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="customer-email">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="vehicle-type-hidden" class="form-label">Vehicle Type</label>
+                      <input type="text" class="form-control" id="vehicle-type-hidden" readonly>
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <label for="customer-note" class="form-label">Additional Notes</label>
+                  <textarea class="form-control" id="customer-note" rows="3" placeholder="Any special requests or information..."></textarea>
+              </div>
+
+              <!-- Hidden fields to store booking information -->
+              <input type="hidden" id="route-from">
+              <input type="hidden" id="route-to">
+              <input type="hidden" id="route-waypoints">
+              <input type="hidden" id="total-distance-hidden">
+              <input type="hidden" id="estimated-fare-hidden">
+
+              <div class="text-center mt-4">
+                  <button type="submit" id="submit-booking" class="btn btn-calculate px-5">
+                      <i class="bi bi-send me-2"></i>Submit Booking
+                  </button>
+
+                  <button type="button" id="cancel-booking" class="btn btn-reset ms-2">
+                      <i class="bi bi-x-circle me-2"></i>Cancel
+                  </button>
+              </div>
+          </form>
+          <div id="booking-success" class="alert alert-success mt-3" style="display: none;">
+              <i class="bi bi-check-circle-fill me-2"></i>Booking successfully submitted! We'll contact you soon.
+          </div>
+          <div id="booking-error" class="alert alert-danger mt-3" style="display: none;">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>There was an error submitting your booking. Please try again or contact us directly.
+          </div>
+      </div>
+  </div>
+        </div>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>About Mayil Taxi</h5>
+                    <p>Mayil Taxi provides comfortable and reliable taxi services in Coimbatore and across Tamil Nadu. We specialize in both one-way drop and multi-day round trip services.</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/919488840332" class="btn rounded-circle" title="WhatsApp" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        <a href="mailto:MayilTaxi@gmail.com" class="btn rounded-circle" title="Email">
+                            <i class="bi bi-envelope"></i>
+                        </a>
+                        <a href="https://maps.app.goo.gl/?q=5A+KRISHNA+SWAMINAGAR+CHINNAMAL+LAYOUT+KK+PUDUR+COIMBATORE+38" class="btn rounded-circle" title="Location" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-geo-alt"></i>
+                        </a>
+                        <a href="#" class="btn rounded-circle" title="Instagram" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled footer-contact">
+                        <li>
+                            <i class="bi bi-telephone-fill icon"></i>
+                            <span>9488840332</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-envelope-fill icon"></i>
+                            <span>mayiltaxi@gmail.com</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-geo-alt-fill icon"></i>
+                            <span>MADURAI & COIMBATORE</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="index.html"><i class="bi bi-chevron-right me-2"></i>Home</a></li>
+                        <li><a href="service.html"><i class="bi bi-chevron-right me-2"></i>Services</a></li>
+                        <li><a href="index.html"><i class="bi bi-chevron-right me-2"></i>Book Now</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mayil Taxi. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Icons -->
+    <div class="floating-icons">
+        <a href="https://wa.me/919488840240" target="_blank" class="icon whatsapp" title="WhatsApp">
+            <img src="https://img.icons8.com/ios-filled/50/25D366/whatsapp.png" alt="WhatsApp">
+        </a>
+        <a href="#" target="_blank" class="icon instagram" title="Instagram">
+            <img src="https://img.icons8.com/ios-filled/50/E1306C/instagram-new.png" alt="Instagram">
+        </a>
+        <a href="tel:+919488840240" class="icon call" title="Call">
+            <img src="https://img.icons8.com/ios-filled/50/000000/phone.png" alt="Call">
+        </a>
+    </div>
+
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Your custom JS -->
+    <script src="package.js"></script>
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTm8unNAZY-We3a05qozpJMPgPJFvKk-8&libraries=places&callback=initMap" async defer></script>
+    </body>
+    </html>
