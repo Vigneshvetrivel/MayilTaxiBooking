@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Mayil Taxi - Booking Form</title>
+    <title>Mayil Taxi</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="1.png">
@@ -424,23 +424,31 @@
        <div class="logo-container">
            <img src="1.png" alt="Mayil Taxi Logo" class="img-fluid">
        </div>
+
+
+
+
+
+
+
   <!-- Form Structure -->
 <div class="booking-container">
     <form id="bookingForm">
-        <!-- Step 1: Trip Type -->
-        <div class="mb-4">
-      <label class="form-label fw-bold"><i class="bi bi-signpost-2-fill me-2"></i>Trip Type</label>
-      <div class="trip-type btn-group w-100" role="group">
-          <input type="radio" class="btn-check" name="tripType" id="drop" value="drop" checked>
-          <label class="btn btn-outline-primary active" for="drop">Drop Trip</label>
+      <!-- Step 1: Trip Type -->
+         <div class="mb-4">
+       <label class="form-label fw-bold"><i class="bi bi-signpost-2-fill me-2"></i>Trip Type</label>
+       <div class="trip-type btn-group w-100" role="group">
+           <input type="radio" class="btn-check" name="tripType" id="drop" value="drop" checked>
+           <label class="btn btn-outline-primary active" for="drop">Drop Trip</label>
 
-          <input type="radio" class="btn-check" name="tripType" id="round" value="round">
-          <label class="btn btn-outline-primary" for="round">Round Trip</label>
+           <input type="radio" class="btn-check" name="tripType" id="round" value="round">
+           <label class="btn btn-outline-primary" for="round">Round Trip</label>
 
-          <input type="radio" class="btn-check" name="tripType" id="package" value="package">
-          <label class="btn btn-outline-primary" for="package">Package Trip</label>
-      </div>
-  </div>
+           <input type="radio" class="btn-check" name="tripType" id="package" value="package">
+           <label class="btn btn-outline-primary" for="package">Package Trip</label>
+       </div>
+   </div>
+
 
         <!-- Step 2: Pickup & Drop Location -->
         <div class="mb-4">
@@ -464,6 +472,24 @@
 
         </div>
 
+        <!-- Pickup and drop date  -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="pickupDate" class="form-label">Pickup Date & Time*</label>
+                    <input type="datetime-local" class="form-control" id="pickupDate" name="pickupDate" required>
+                    <div class="invalid-feedback" id="pickupDateError"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Return Date Field (only shows for round trip) -->
+                <div class="mb-3" id="dropDateContainer" style="display: none;">
+                    <label for="dropDate" class="form-label">Return Date & Time*</label>
+                    <input type="datetime-local" class="form-control" id="dropDate" name="dropDate">
+                    <div class="invalid-feedback" id="dropDateError"></div>
+                </div>
+            </div>
+        </div>
         <!-- Step 3: Vehicle Type -->
 
     <div class="mb-4">
@@ -518,7 +544,7 @@
                     <input class="form-check-input" type="radio" name="vehicleType" id="crysta" value="crysta">
                     <div class="vehicle-info">
                         <div class="vehicle-text">
-                            <label class="form-check-label fw-bold" for="crysta">7+1 Innova/Crysta</label>
+                            <label class="form-check-label fw-bold" for="crysta">7+1 Innova</label>
                         </div>
                         <img src="SUV.png" class="taxi-png" alt="Innova Icon">
                         <div class="vehicle-rate">₹20/km</div>
@@ -538,11 +564,11 @@
 
         <!-- Results Section -->
         <div id="results" class="results" style="display: none;">
-            <h4 class="mb-3">Trip Details</h4>
+
             <div class="row">
                 <div class="col-md-6">
                     <p><strong>Distance:</strong> <span id="distanceResult"></span></p>
-                    <p><strong>Estimated Duration:</strong> <span id="durationResult"></span></p>
+
                     <div class="round-trip-details" style="display: none;">
                         <p><strong>Total Days:</strong> <span id="totalDaysResult"></span></p>
                         <input type="hidden" id="totalDays" name="totalDays">
@@ -551,9 +577,13 @@
                 <div class="col-md-6">
                     <p class="fare-estimation">Estimated Fare: <span id="fareEstimation"></span></p>
                     <p class="safety-note">"The actual bill may differ based on the driver's allowance, actual distance traveled, waiting time, night charges, hill station charges, and inter-state permits."</p>
+
+                </div>
+                <div class="additional-notes">
+                    <p class="small text-muted"><i class="fa fa-info-circle"></i> Additional day will be charged at <strong><span id="additionalDayRate">₹1700</span></strong> per day.</p>
+                    <p class="small text-muted"><i class="fa fa-info-circle"></i> Additional kilometers beyond the estimated distance will be charged at <strong><span id="additionalKmRate">₹13</span></strong> per km.</p>
                 </div>
             </div>
-
             <!-- Hidden fields to store calculated values -->
             <input type="hidden" id="distanceKm" name="distanceKm">
             <input type="hidden" id="estimatedFare" name="estimatedFare">
@@ -567,23 +597,7 @@
         <!-- Step 6: Personal Information (initially hidden) -->
         <div id="personalInfoSection" class="mb-4" style="display: none;">
             <h4 class="mb-3">Booking Details</h4>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="pickupDate" class="form-label">Pickup Date & Time*</label>
-                        <input type="datetime-local" class="form-control" id="pickupDate" name="pickupDate" required>
-                        <div class="invalid-feedback" id="pickupDateError"></div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <!-- Return Date Field (only shows for round trip) -->
-                    <div class="mb-3" id="dropDateContainer" style="display: none;">
-                        <label for="dropDate" class="form-label">Return Date & Time*</label>
-                        <input type="datetime-local" class="form-control" id="dropDate" name="dropDate">
-                        <div class="invalid-feedback" id="dropDateError"></div>
-                    </div>
-                </div>
-            </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
@@ -713,80 +727,80 @@
 
 // Toggle return date field based on trip type
 document.querySelectorAll('input[name="tripType"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        if (this.value === 'round') {
-            document.getElementById('dropDateContainer').style.display = 'block';
-            document.getElementById('dropDate').required = true;
-        } else {
-            document.getElementById('dropDateContainer').style.display = 'none';
-            document.getElementById('dropDate').required = false;
-        }
-    });
+  radio.addEventListener('change', function() {
+      if (this.value === 'round') {
+          document.getElementById('dropDateContainer').style.display = 'block';
+          document.getElementById('dropDate').required = true;
+      } else {
+          document.getElementById('dropDateContainer').style.display = 'none';
+          document.getElementById('dropDate').required = false;
+      }
+  });
 });
 
 // Show personal information section after fare calculation is accepted
 document.getElementById('proceedToBooking').addEventListener('click', function() {
-    document.getElementById('personalInfoSection').style.display = 'block';
-    // Smooth scroll to the personal info section
-    document.getElementById('personalInfoSection').scrollIntoView({behavior: 'smooth'});
+  document.getElementById('personalInfoSection').style.display = 'block';
+  // Smooth scroll to the personal info section
+  document.getElementById('personalInfoSection').scrollIntoView({behavior: 'smooth'});
 });
 
 // Make sure the calculate button also sets up required fields properly
 document.getElementById('calculate').addEventListener('click', function() {
-    // Your existing calculation code here
+  // Your existing calculation code here
 
-    // Make sure the results section is displayed
-    document.getElementById('results').style.display = 'block';
+  // Make sure the results section is displayed
+  document.getElementById('results').style.display = 'block';
 
-    // Show round trip details if round trip is selected
-    if (document.getElementById('round').checked) {
-        document.querySelectorAll('.round-trip-details').forEach(el => {
-            el.style.display = 'block';
-        });
-    } else {
-        document.querySelectorAll('.round-trip-details').forEach(el => {
-            el.style.display = 'none';
-        });
-    }
+  // Show round trip details if round trip is selected
+  if (document.getElementById('round').checked) {
+      document.querySelectorAll('.round-trip-details').forEach(el => {
+          el.style.display = 'block';
+      });
+  } else {
+      document.querySelectorAll('.round-trip-details').forEach(el => {
+          el.style.display = 'none';
+      });
+  }
 });
 // Replaced existing selectVehicle function with this one
 
 function selectVehicle(element, id) {
-  // Remove selected class from all options
-  document.querySelectorAll('.vehicle-option').forEach(option => {
-      option.classList.remove('selected');
-      option.querySelector('.taxi-png')?.classList.remove('animate-bounce');
-  });
+// Remove selected class from all options
+document.querySelectorAll('.vehicle-option').forEach(option => {
+    option.classList.remove('selected');
+    option.querySelector('.taxi-png')?.classList.remove('animate-bounce');
+});
 
-  // Add selected class to clicked option
-  element.classList.add('selected');
-  element.querySelector('.taxi-png')?.classList.add('animate-bounce');
+// Add selected class to clicked option
+element.classList.add('selected');
+element.querySelector('.taxi-png')?.classList.add('animate-bounce');
 
-  // Check the radio button
-  document.getElementById(id).checked = true;
+// Check the radio button
+document.getElementById(id).checked = true;
 }
 
-        // For trip type buttons
-        document.querySelectorAll('.trip-type .btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.trip-type .btn').forEach(b => {
-                    b.classList.remove('active');
-                });
-                this.classList.add('active');
-            });
-        });
+      // For trip type buttons
+      document.querySelectorAll('.trip-type .btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+              document.querySelectorAll('.trip-type .btn').forEach(b => {
+                  b.classList.remove('active');
+              });
+              this.classList.add('active');
+          });
+      });
 
-        document.addEventListener('DOMContentLoaded', function() {
-    // Get the package trip radio button
-    const packageRadio = document.getElementById('package');
+      document.addEventListener('DOMContentLoaded', function() {
+  // Get the package trip radio button
+  const packageRadio = document.getElementById('package');
 
-    // Add change event listener
-    packageRadio.addEventListener('change', function() {
-        if (this.checked) {
-            // Redirect to package.html when Package Trip is selected
-            window.location.href = 'package.html';
-        }
-    });
+  // Add change event listener
+  packageRadio.addEventListener('change', function() {
+      if (this.checked) {
+          // Redirect to package.html when Package Trip is selected
+          window.location.href = 'package.html';
+      }
+  });
 });
     </script>
 
