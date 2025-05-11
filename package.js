@@ -1,6 +1,6 @@
 // Constants for API endpoints
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYoDCeJl_FOpnYz1HLAKHvmOTr00GHz7_-Osdoe75-b9Tnr9m9cKeKaAlZKbz5K2EO/exec";
-const SHEET_ID = "1OMu8lUxVgmaQg58VthxI2lZHZuyTvW33TGhPdqt7mn8";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwysXBJdvVV2nTp4Paq7bpmwAKiNZygsHv2rvZV61xljpS-n59nzZ5ip-GkeeCKyLdM/exec";
+const SHEET_ID = "18wXPzW0fLujgAKoIRKQUzfuXqFJlu8p7GVnyZCbTT8E";
 
 let map;
 let directionsService;
