@@ -13,7 +13,7 @@ let calculatedFare = false;
 let submissionInProgress = false;
 let mapLoaded = false;
 
-// Constants
+// Constants with updated pricing structure
 const BASE_RATES = {
     hatchback: 13,
     sedan: 14,
@@ -21,6 +21,13 @@ const BASE_RATES = {
     crysta: 20
 };
 
+// Add the new daily rental rates
+const DAILY_RATES = {
+    hatchback: 1700,
+    sedan: 1800,
+    ertiga: 2300,
+    crysta: 2500  // Note: In your request, you called this "innovo" but in the code it's "crysta"
+};
 // Set min date for pickup to today and default value to 1 hour from now
 function initializeDateFields() {
     const today = new Date();
@@ -443,6 +450,26 @@ function validatePhone(phone) {
 
 // Calculate fare based on trip type, vehicle type and distance
 function calculateFare() {
+
+  // Add this to your calculateFare function, just before the end -
+// right after you display the results but before the closing bracket
+
+// Update the additional information notes based on selected vehicle
+const vehicleType = document.querySelector('input[name="vehicleType"]:checked')?.value || 'hatchback';
+const dailyRate = DAILY_RATES[vehicleType] || 1700;
+const kmRate = BASE_RATES[vehicleType] || 13;
+
+const additionalDayNote = document.getElementById('additionalDayRate');
+if (additionalDayNote) {
+    additionalDayNote.textContent = `₹${dailyRate}`;
+}
+
+const additionalKmNote = document.getElementById('additionalKmRate');
+if (additionalKmNote) {
+    additionalKmNote.textContent = `₹${kmRate}`;
+}
+
+
     const pickup = document.getElementById('pickup')?.value;
     const dropoff = document.getElementById('dropoff')?.value;
 
@@ -509,31 +536,39 @@ function calculateFare() {
             const vehicleType = document.querySelector('input[name="vehicleType"]:checked')?.value || 'hatchback';
             const tripType = document.querySelector('input[name="tripType"]:checked')?.value || 'drop';
 
-            // Calculate fare based on vehicle type
+            // Get distance cost rates based on vehicle type
             let ratePerKm = BASE_RATES[vehicleType] || 13; // Default to hatchback rate if not found
 
+            // Get daily rental rates based on vehicle type
+            let dailyRate = DAILY_RATES[vehicleType] || 1700; // Default to hatchback rate if not found
+
             let estimatedFare = 0;
-            let totalDays = 0;
+            let totalDays = 1; // Default to 1 day for drop trips
 
             // Adjust fare based on trip type
             if (tripType === 'drop') {
-                estimatedFare = distanceInKm * ratePerKm;
-                const roundTripDetails = document.querySelector('.round-trip-details');
-                if (roundTripDetails) {
-                    roundTripDetails.style.display = 'none';
-                }
-            } else if (tripType === 'round') {
-                estimatedFare = distanceInKm * 2 * ratePerKm;
+        // Formula: (Distance * vehicle Rs/km) + (Vehicle type daily rate)
+        estimatedFare = (distanceInKm * ratePerKm) + dailyRate;
 
-                // Calculate days between pickup and drop dates
-                totalDays = calculateTotalDays();
+        const roundTripDetails = document.querySelector('.round-trip-details');
+        if (roundTripDetails) {
+            roundTripDetails.style.display = 'none';
+        }
+    } else if (tripType === 'round') {
+        // Calculate days between pickup and drop dates
+        totalDays = calculateTotalDays();
+        if (totalDays < 1) totalDays = 1; // Ensure at least 1 day
 
-                // Update display of round trip details
-                const roundTripDetails = document.querySelector('.round-trip-details');
-                if (roundTripDetails) {
-                    roundTripDetails.style.display = 'block';
-                }
-            }
+        // FIXED FORMULA: For round trip, double the distance first, then multiply by rate per km
+        const roundTripDistance = distanceInKm * 2;
+        estimatedFare = (roundTripDistance * ratePerKm) + (dailyRate * totalDays);
+
+        // Update display of round trip details
+        const roundTripDetails = document.querySelector('.round-trip-details');
+        if (roundTripDetails) {
+            roundTripDetails.style.display = 'block';
+        }
+    }
 
             // Apply minimum fare if applicable (e.g., 500 rupees)
             const minimumFare = 500;
@@ -542,8 +577,16 @@ function calculateFare() {
             }
 
             // Display results
-            const distanceResult = document.getElementById('distanceResult');
-            if (distanceResult) distanceResult.textContent = distanceInKm.toFixed(2) + ' km';
+            // Display results
+const distanceResult = document.getElementById('distanceResult');
+if (distanceResult) {
+    // For round trips, show double the distance
+    if (tripType === 'round') {
+        distanceResult.textContent = (distanceInKm * 2).toFixed(2) + ' km (round trip)';
+    } else {
+        distanceResult.textContent = distanceInKm.toFixed(2) + ' km';
+    }
+}
 
             const durationResult = document.getElementById('durationResult');
             if (durationResult) durationResult.textContent = Math.round(durationMin) + ' minutes';
@@ -584,9 +627,6 @@ function calculateFare() {
         }
     });
 }
-
-// Generate a unique booking reference
-// Generate a booking reference with the new format
 function generateBookingReference() {
     // Format: MT[YYYYMMDD]_[D/R][sequential number]
     const date = new Date();
@@ -594,7 +634,6 @@ function generateBookingReference() {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
 
-    // We'll use localStorage to track sequential numbers separately for drop and round trips
     // Initialize the counters if they don't exist
     if (!localStorage.getItem('dropTripCounter')) {
         localStorage.setItem('dropTripCounter', '0');
@@ -606,17 +645,23 @@ function generateBookingReference() {
     // Get the trip type
     const tripType = document.querySelector('input[name="tripType"]:checked')?.value || 'drop';
 
-    // Increment the appropriate counter
+    // Increment the appropriate counter and set the correct prefix
     let counter;
     let prefix;
+
     if (tripType === 'drop') {
         counter = parseInt(localStorage.getItem('dropTripCounter')) + 1;
         localStorage.setItem('dropTripCounter', counter.toString());
         prefix = 'D';
-    } else {
+    } else if (tripType === 'round') {
         counter = parseInt(localStorage.getItem('roundTripCounter')) + 1;
         localStorage.setItem('roundTripCounter', counter.toString());
         prefix = 'R';
+    } else {
+        // Handle package trips or any other type (fallback)
+        counter = parseInt(localStorage.getItem('dropTripCounter')) + 1;
+        localStorage.setItem('dropTripCounter', counter.toString());
+        prefix = 'P'; // Using 'P' for package trips
     }
 
     return `MT${year}${month}${day}_${prefix}${counter}`;
@@ -795,130 +840,124 @@ function populateBookingDetails(formData, bookingRef) {
  * Modified to ensure booking reference consistency
  */
 
-// Submit booking to backend
-function submitBooking(e) {
-    e.preventDefault();
-    console.log("Submitting booking form...");
+ // Modify your submitBooking function to include the booking reference
+ function submitBooking(e) {
+     e.preventDefault();
+     console.log("Submitting booking form...");
 
-    // Prevent multiple submissions
-    if (submissionInProgress) {
-        console.log("Submission already in progress, ignoring duplicate submission");
-        return;
-    }
+     // Prevent multiple submissions
+     if (submissionInProgress) {
+         console.log("Submission already in progress, ignoring duplicate submission");
+         return;
+     }
 
-    // Hide any previous messages
-    const successElement = document.getElementById('successMessage');
-    const errorElement = document.getElementById('errorMessage');
+     // Hide any previous messages
+     const successElement = document.getElementById('successMessage');
+     const errorElement = document.getElementById('errorMessage');
 
-    if (successElement) successElement.style.display = 'none';
-    if (errorElement) errorElement.style.display = 'none';
+     if (successElement) successElement.style.display = 'none';
+     if (errorElement) errorElement.style.display = 'none';
 
-    // Validate form
-    const { isValid, errors } = validateForm();
-    if (!isValid) {
-        console.log("Form validation failed:", errors);
-        return;
-    }
+     // Validate form
+     const { isValid, errors } = validateForm();
+     if (!isValid) {
+         console.log("Form validation failed:", errors);
+         return;
+     }
 
-    // Get form data for submission
-    const formData = new FormData(document.getElementById('bookingForm'));
-    const jsonData = {};
+     // Get form data for submission
+     const formData = new FormData(document.getElementById('bookingForm'));
+     const jsonData = {};
 
-    formData.forEach((value, key) => {
-        jsonData[key] = value;
-    });
+     formData.forEach((value, key) => {
+         jsonData[key] = value;
+     });
 
-    // IMPORTANT: Do not generate a booking reference client-side
-    // Let the server generate it to avoid discrepancies
-    // Remove this line: jsonData.bookingRef = generateBookingReference();
+     // IMPORTANT: Add the booking reference client-side to ensure proper format
+     jsonData.bookingRef = generateBookingReference();
 
-    console.log("Form data collected:", jsonData);
+     console.log("Form data collected:", jsonData);
 
-    // Use the provided Google Apps Script URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzDG_nUjxCShmYAcOZ4-PMRZ696PgOHnKpsm4JFGuitZgRqS5XbRpf07ZmTUW-ul4pP/exec';
+     // Use the provided Google Apps Script URL
+     const scriptURL = 'https://script.google.com/macros/s/AKfycbzDG_nUjxCShmYAcOZ4-PMRZ696PgOHnKpsm4JFGuitZgRqS5XbRpf07ZmTUW-ul4pP/exec';
 
-    // Show loading state
-    const submitButton = document.getElementById('submitButton');
-    let originalButtonText = 'Submit Booking';
+     // Show loading state
+     const submitButton = document.getElementById('submitButton');
+     let originalButtonText = 'Submit Booking';
 
-    if (submitButton) {
-        originalButtonText = submitButton.textContent;
-        submitButton.disabled = true;
-        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
-    }
+     if (submitButton) {
+         originalButtonText = submitButton.textContent;
+         submitButton.disabled = true;
+         submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+     }
 
-    submissionInProgress = true;
+     submissionInProgress = true;
 
-    console.log("Sending data to backend URL:", scriptURL);
+     console.log("Sending data to backend URL:", scriptURL);
 
-    // Create a temporary form and submit it
-    const tempForm = document.createElement('form');
-    tempForm.method = 'POST';
-    tempForm.action = scriptURL;
-    tempForm.target = '_blank'; // Open response in new tab
+     // Create a temporary form and submit it
+     const tempForm = document.createElement('form');
+     tempForm.method = 'POST';
+     tempForm.action = scriptURL;
+     tempForm.target = '_blank'; // Open response in new tab
 
-    // Add form data as hidden fields
-    for (const key in jsonData) {
-        if (jsonData.hasOwnProperty(key)) {
-            const hiddenField = document.createElement('input');
-            hiddenField.type = 'hidden';
-            hiddenField.name = key;
-            hiddenField.value = jsonData[key];
-            tempForm.appendChild(hiddenField);
-        }
-    }
+     // Add form data as hidden fields
+     for (const key in jsonData) {
+         if (jsonData.hasOwnProperty(key)) {
+             const hiddenField = document.createElement('input');
+             hiddenField.type = 'hidden';
+             hiddenField.name = key;
+             hiddenField.value = jsonData[key];
+             tempForm.appendChild(hiddenField);
+         }
+     }
 
-    // Add submission method field
-    const methodField = document.createElement('input');
-    methodField.type = 'hidden';
-    methodField.name = 'submitMethod';
-    methodField.value = 'formSubmit';
-    tempForm.appendChild(methodField);
+     // Add submission method field
+     const methodField = document.createElement('input');
+     methodField.type = 'hidden';
+     methodField.name = 'submitMethod';
+     methodField.value = 'formSubmit';
+     tempForm.appendChild(methodField);
 
-    // Append form to body and submit
-    document.body.appendChild(tempForm);
+     // Append form to body and submit
+     document.body.appendChild(tempForm);
 
-    try {
-        tempForm.submit();
+     try {
+         tempForm.submit();
 
-        // Now we rely on the server response for the booking reference
-        // The server will show the confirmation with the correct reference
-        // in the new tab that opens
+         setTimeout(() => {
+             // Here we just show that the form was submitted
+             if (submitButton) {
+                 submitButton.disabled = false;
+                 submitButton.innerHTML = originalButtonText;
+             }
 
-        setTimeout(() => {
-            // Here we just show that the form was submitted
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalButtonText;
-            }
+             // Show a simple message without a reference
+             if (successElement) {
+                 const bookingReferenceElement = document.getElementById('bookingReference');
+                 if (bookingReferenceElement) {
+                     bookingReferenceElement.textContent = jsonData.bookingRef;
+                 }
+                 successElement.style.display = 'block';
+                 successElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+             }
 
-            // Show a simple message without a reference
-            if (successElement) {
-                const bookingReferenceElement = document.getElementById('bookingReference');
-                if (bookingReferenceElement) {
-                    bookingReferenceElement.textContent = "(see confirmation page)";
-                }
-                successElement.style.display = 'block';
-                successElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+             resetForm();
+         }, 1000);
+     } catch (error) {
+         console.error("Error submitting form:", error);
+         showErrorMessage(error.message || 'Failed to submit booking');
+     } finally {
+         // Clean up the temporary form
+         document.body.removeChild(tempForm);
 
-            resetForm();
-        }, 1000);
-    } catch (error) {
-        console.error("Error submitting form:", error);
-        showErrorMessage(error.message || 'Failed to submit booking');
-    } finally {
-        // Clean up the temporary form
-        document.body.removeChild(tempForm);
-
-        submissionInProgress = false;
-        if (submitButton) {
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonText;
-        }
-    }
-}
-
+         submissionInProgress = false;
+         if (submitButton) {
+             submitButton.disabled = false;
+             submitButton.innerHTML = originalButtonText;
+         }
+     }
+ }
 // Load Google Maps API script securely
 function loadGoogleMapsAPI() {
     // In a production environment, the API key should be loaded from server-side
