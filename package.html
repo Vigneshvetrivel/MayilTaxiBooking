@@ -25,7 +25,13 @@
         .navbar-brand img {
             max-height: 50px;
         }
-
+        .booking-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
         .logo-container {
             text-align: center;
             margin: 20px 0;
@@ -86,6 +92,7 @@
             margin: 20px 0;
             border-left: 4px solid var(--primary);
         }
+
 
         /* Footer styles */
         .footer {
@@ -261,7 +268,13 @@
     align-items: center;
     gap: 10px;
 }
+.vehicle-option .form-check {
+    padding-left: 0;
+}
 
+.vehicle-option .form-check-input {
+    margin-top: 10px;
+}
 .taxi-png {
     width: 50px;
     height: 50px;
@@ -423,7 +436,16 @@
         font-size: 0.8rem;
     }
 }
+.trip-type .btn {
+    background-color: white !important;
+    color: #495057 !important;
+}
 
+/* Only package button gets the yellow highlight */
+#packageBtn {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
     </style>
 </head>
 <body>
@@ -462,13 +484,14 @@
 
         <!-- Step 1: Trip Type -->
         <div class="mb-4">
-            <label class="form-label fw-bold"><i class="bi bi-signpost-2-fill me-2"></i>Trip Type</label>
-            <div class="trip-type btn-group w-100" role="group">
-                <a href="index.html" id="dropBtn" class="btn active" style="border: 2px solid #dee2e6; transition: all 0.3s;">Drop Trip</a>
-                <a href="index.html" id="roundBtn" class="btn" style="background-color: white; color: #495057; border: 2px solid #dee2e6; transition: all 0.3s;">Round Trip</a>
-                <a href="package.html" id="packageBtn" class="btn" style="background-color: white; color: #495057; border: 2px solid #dee2e6; transition: all 0.3s;">Package Trip</a>
-            </div>
+        <label class="form-label fw-bold"><i class="bi bi-signpost-2-fill me-2"></i>Trip Type</label>
+        <div class="trip-type btn-group w-100" role="group">
+            <a href="index.html#drop" id="dropBtn" class="btn" style="background-color: white; color: #495057; border: 2px solid #dee2e6; transition: all 0.3s;">Drop Trip</a>
+            <a href="index.html#round" id="roundBtn" class="btn" style="background-color: white; color: #495057; border: 2px solid #dee2e6; transition: all 0.3s;">Round Trip</a>
+            <a href="#" id="packageBtn" class="btn" style="background-color: #ffc107; color: #212529; border: 2px solid #dee2e6; transition: all 0.3s;">Package Trip</a>
         </div>
+    </div>
+
 
         <!-- Distance Calculator Container -->
         <div class="booking-container">
@@ -488,7 +511,16 @@
           </div>
       </div>
   </div>
-
+  <div class="row mb-3">
+      <div class="col-md-6">
+          <label for="pickup-datetime" class="form-label">Pickup Date & Time*</label>
+          <input type="datetime-local" class="form-control" id="pickup-datetime" required>
+      </div>
+      <div class="col-md-6">
+          <label for="drop-date" class="form-label">Drop Date*</label>
+          <input type="date" class="form-control" id="drop-date" required>
+      </div>
+  </div>
   <!-- Add this new section for waypoints -->
   <div id="waypoints-container">
       <!-- Waypoints will be added here dynamically -->
@@ -556,7 +588,7 @@
                 <input class="form-check-input" type="radio" name="vehicleType" id="crysta" value="crysta">
                 <div class="vehicle-info">
                     <div class="vehicle-text">
-                        <label class="form-check-label fw-bold" for="crysta">7+1 Innova/Crysta</label>
+                        <label class="form-check-label fw-bold" for="crysta">7+1 Innova</label>
                     </div>
                     <img src="SUV.png" class="taxi-png" alt="Innova Icon">
                     <div class="vehicle-rate">₹20/km</div>
@@ -604,69 +636,59 @@
             <br>
             <!-- Add this HTML form right after the "Journey Summary" section in your results display -->
             <div id="booking-form-container" class="mt-4" style="display: none;">
-                <div class="booking-form p-4" style="background-color: #f8f9fa; border-radius: 10px; border-left: 4px solid var(--primary);">
-                    <h4><i class="bi bi-calendar-check me-2"></i>Book Your Package Trip</h4>
-                    <form id="booking-form">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="customer-name" class="form-label">Name*</label>
-                                <input type="text" class="form-control" id="customer-name" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="customer-phone" class="form-label">Phone Number*</label>
-                                <input type="tel" class="form-control" id="customer-phone" required>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="customer-email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="customer-email">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="pickup-datetime" class="form-label">Pickup Date & Time*</label>
-                                <input type="datetime-local" class="form-control" id="pickup-datetime" required>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="drop-date" class="form-label">Drop Date*</label>
-                                <input type="date" class="form-control" id="drop-date" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="vehicle-type-hidden" class="form-label">Vehicle Type</label>
-                                <input type="text" class="form-control" id="vehicle-type-hidden" readonly>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="customer-note" class="form-label">Additional Notes</label>
-                            <textarea class="form-control" id="customer-note" rows="3" placeholder="Any special requests or information..."></textarea>
-                        </div>
+      <div class="booking-form p-4" style="background-color: #f8f9fa; border-radius: 10px; border-left: 4px solid var(--primary);">
+          <h4><i class="bi bi-calendar-check me-2"></i>Book Your Package Trip</h4>
+          <form id="booking-form">
+              <div class="row mb-3">
+                  <div class="col-md-6">
+                      <label for="customer-name" class="form-label">Name*</label>
+                      <input type="text" class="form-control" id="customer-name" required>
+                  </div>
+                  <div class="col-md-6">
+                      <label for="customer-phone" class="form-label">Phone Number*</label>
+                      <input type="tel" class="form-control" id="customer-phone" required>
+                  </div>
+              </div>
+              <div class="row mb-3">
+                  <div class="col-md-6">
+                      <label for="customer-email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="customer-email">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="vehicle-type-hidden" class="form-label">Vehicle Type</label>
+                      <input type="text" class="form-control" id="vehicle-type-hidden" readonly>
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <label for="customer-note" class="form-label">Additional Notes</label>
+                  <textarea class="form-control" id="customer-note" rows="3" placeholder="Any special requests or information..."></textarea>
+              </div>
 
-                        <!-- Hidden fields to store booking information -->
-                        <input type="hidden" id="route-from">
-                        <input type="hidden" id="route-to">
-                        <input type="hidden" id="route-waypoints">
-                        <input type="hidden" id="total-distance-hidden">
-                        <input type="hidden" id="estimated-fare-hidden">
+              <!-- Hidden fields to store booking information -->
+              <input type="hidden" id="route-from">
+              <input type="hidden" id="route-to">
+              <input type="hidden" id="route-waypoints">
+              <input type="hidden" id="total-distance-hidden">
+              <input type="hidden" id="estimated-fare-hidden">
 
-                        <div class="text-center mt-4">
-                            <button type="submit" id="submit-booking" class="btn btn-calculate px-5">
-                                <i class="bi bi-send me-2"></i>Submit Booking
-                            </button>
+              <div class="text-center mt-4">
+                  <button type="submit" id="submit-booking" class="btn btn-calculate px-5">
+                      <i class="bi bi-send me-2"></i>Submit Booking
+                  </button>
 
-                            <button type="button" id="cancel-booking" class="btn btn-reset ms-2">
-                                <i class="bi bi-x-circle me-2"></i>Cancel
-                            </button>
-                        </div>
-                    </form>
-                    <div id="booking-success" class="alert alert-success mt-3" style="display: none;">
-                        <i class="bi bi-check-circle-fill me-2"></i>Booking successfully submitted! We'll contact you soon.
-                    </div>
-                    <div id="booking-error" class="alert alert-danger mt-3" style="display: none;">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>There was an error submitting your booking. Please try again or contact us directly.
-                    </div>
-                </div>
-            </div>
+                  <button type="button" id="cancel-booking" class="btn btn-reset ms-2">
+                      <i class="bi bi-x-circle me-2"></i>Cancel
+                  </button>
+              </div>
+          </form>
+          <div id="booking-success" class="alert alert-success mt-3" style="display: none;">
+              <i class="bi bi-check-circle-fill me-2"></i>Booking successfully submitted! We'll contact you soon.
+          </div>
+          <div id="booking-error" class="alert alert-danger mt-3" style="display: none;">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>There was an error submitting your booking. Please try again or contact us directly.
+          </div>
+      </div>
+  </div>
         </div>
     </div>
 
@@ -747,6 +769,102 @@
 
     <script>
 
+    // Script to handle trip type selection and URL fragments
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if we're using the button version or the radio button version
+      const usingRadioButtons = document.querySelector('.btn-check') !== null;
+
+      // Function to set active state based on trip type
+      function setActiveTripType(tripType) {
+        if (usingRadioButtons) {
+          // For the radio button version
+          document.getElementById(tripType).checked = true;
+
+          // Update the active class on labels
+          document.querySelectorAll('.btn-outline-primary').forEach(btn => {
+            if (btn.getAttribute('for') === tripType) {
+              btn.classList.add('active');
+            } else {
+              btn.classList.remove('active');
+            }
+          });
+        } else {
+          // For the anchor tag version
+          const buttons = {
+            'drop': document.getElementById('dropBtn'),
+            'round': document.getElementById('roundBtn'),
+            'package': document.getElementById('packageBtn')
+          };
+
+          // Update active states
+          Object.keys(buttons).forEach(key => {
+            if (key === tripType && buttons[key]) {
+              buttons[key].classList.add('active');
+              buttons[key].style.backgroundColor = '';
+              buttons[key].style.color = '';
+            } else if (buttons[key]) {
+              buttons[key].classList.remove('active');
+              buttons[key].style.backgroundColor = 'white';
+              buttons[key].style.color = '#495057';
+            }
+          });
+        }
+      }
+
+      // Check URL hash on page load
+      function checkURLFragment() {
+        const hash = window.location.hash.substring(1); // Remove the # character
+        if (hash === 'round') {
+          setActiveTripType('round');
+        } else if (hash === 'package') {
+          setActiveTripType('package');
+        } else {
+          setActiveTripType('drop');
+        }
+      }
+
+      // Run on page load
+      checkURLFragment();
+
+      // Set up event listeners for the anchor tag version
+      if (!usingRadioButtons) {
+        if (document.getElementById('roundBtn')) {
+          document.getElementById('roundBtn').addEventListener('click', function(e) {
+            // Don't prevent default as we want the page navigation to happen
+            // The hash in the URL will be processed on the next page load
+          });
+        }
+
+        if (document.getElementById('dropBtn')) {
+          document.getElementById('dropBtn').addEventListener('click', function(e) {
+            // Similar approach for consistency
+          });
+        }
+
+        if (document.getElementById('packageBtn')) {
+          document.getElementById('packageBtn').addEventListener('click', function(e) {
+            // Similar approach for consistency
+          });
+        }
+      }
+
+      // Set up event listeners for the radio button version
+      if (usingRadioButtons) {
+        document.querySelectorAll('.btn-check').forEach(radio => {
+          radio.addEventListener('change', function() {
+            setActiveTripType(this.id);
+            // Update URL hash without reloading the page
+            history.pushState(null, null, '#' + this.id);
+          });
+        });
+      }
+
+      // Handle browser back/forward navigation
+      window.addEventListener('popstate', checkURLFragment);
+    });
+
+
+
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYoDCeJl_FOpnYz1HLAKHvmOTr00GHz7_-Osdoe75-b9Tnr9m9cKeKaAlZKbz5K2EO/exec";
 const SHEET_ID = "1OMu8lUxVgmaQg58VthxI2lZHZuyTvW33TGhPdqt7mn8";
 
@@ -770,6 +888,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Update the showBookingForm function to include number of days
 function showBookingForm() {
     // Get and store trip details in hidden fields
     const pickup = document.getElementById("pickup").value;
@@ -787,6 +906,7 @@ function showBookingForm() {
     // Get total distance and estimated fare from the results section
     const totalDistanceText = document.getElementById("total-distance").textContent;
     const fareText = document.getElementById("fare-estimation").textContent;
+    const daysText = document.getElementById("total-days").textContent;
 
     // Get selected vehicle type
     let vehicleType = "Hatchback";
@@ -795,7 +915,7 @@ function showBookingForm() {
     } else if (document.getElementById('ertiga').checked) {
         vehicleType = "Ertiga/Rumion";
     } else if (document.getElementById('crysta').checked) {
-        vehicleType = "Innova/Crysta";
+        vehicleType = "Innova";
     }
 
     // Set values in hidden fields
@@ -812,7 +932,6 @@ function showBookingForm() {
     // Scroll to the booking form
     document.getElementById("booking-form-container").scrollIntoView({ behavior: 'smooth' });
 }
-
 function hideBookingForm() {
     document.getElementById("booking-form-container").style.display = "none";
     document.getElementById("booking-form").reset();
@@ -820,6 +939,7 @@ function hideBookingForm() {
     document.getElementById("booking-error").style.display = "none";
 }
 
+// Also update the submitBooking function to include the new day-based fare calculation
 function submitBooking() {
     // Show loading state
     const submitBtn = document.getElementById("submit-booking");
@@ -836,10 +956,14 @@ function submitBooking() {
     const dropDate = new Date(document.getElementById("drop-date").value);
     const formattedDropDate = dropDate.toLocaleDateString();
 
+    // Calculate number of days
+    const diffTime = Math.abs(dropDate - pickupDateTime);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
     // Create data object for the API
     const data = {
         sheetId: SHEET_ID,
-        sheetName: "PackageBookings",
+        sheetName: "Package Bookings",
         data: {
             timestamp: new Date().toLocaleString(),
             name: document.getElementById("customer-name").value,
@@ -847,6 +971,7 @@ function submitBooking() {
             email: document.getElementById("customer-email").value || "N/A",
             pickupDatetime: formattedPickupDateTime,
             dropDate: formattedDropDate,
+            numberOfDays: diffDays,
             pickup: document.getElementById("route-from").value,
             destination: document.getElementById("route-to").value,
             waypoints: document.getElementById("route-waypoints").value || "None",
@@ -892,52 +1017,6 @@ function submitBooking() {
         document.getElementById("booking-success").style.display = "none";
     });
 }
-// Trip Types
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Detect current page and highlight the appropriate button
-    const currentPath = window.location.pathname;
-    const currentHash = window.location.hash;
-
-    // Remove active style from all buttons
-    document.querySelectorAll('.trip-type .btn').forEach(btn => {
-        btn.style.backgroundColor = 'white';
-        btn.style.color = '#495057';
-        btn.classList.remove('active');
-    });
-
-    // Set active style based on current page/hash
-    if (currentPath.includes('package.html')) {
-        // On package page
-        const packageBtn = document.getElementById('packageBtn');
-        if (packageBtn) {
-            packageBtn.style.backgroundColor = 'var(--primary)';
-            packageBtn.style.color = 'var(--secondary)';
-            packageBtn.style.fontWeight = 'bold';
-            packageBtn.classList.add('active');
-        }
-    } else {
-        // On index page - check for hash
-        if (currentHash === '#round') {
-            const roundBtn = document.getElementById('roundBtn');
-            if (roundBtn) {
-                roundBtn.style.backgroundColor = 'var(--primary)';
-                roundBtn.style.color = 'var(--secondary)';
-                roundBtn.style.fontWeight = 'bold';
-                roundBtn.classList.add('active');
-            }
-        } else {
-            // Default to drop (either #drop or no hash)
-            const dropBtn = document.getElementById('dropBtn');
-            if (dropBtn) {
-                dropBtn.style.backgroundColor = 'var(--primary)';
-                dropBtn.style.color = 'var(--secondary)';
-                dropBtn.style.fontWeight = 'bold';
-                dropBtn.classList.add('active');
-            }
-        }
-    }
-});
 // Vehicle selection function
 function selectVehicle(element, id) {
   // Remove selected class from all options
@@ -1058,13 +1137,28 @@ function selectVehicle(element, id) {
       document.getElementById(id).checked = true;
     }
 
-    // Update the calculateRoute function to include the new route visualization
+    // Update calculateRoute function to include day rent calculation
 function calculateRoute() {
     const pickup = document.getElementById("pickup").value;
     const destination = document.getElementById("destination").value;
+    const pickupDateTime = document.getElementById("pickup-datetime").value;
+    const dropDate = document.getElementById("drop-date").value;
 
-    if (!pickup || !destination) {
-        alert("Please enter both pickup and destination locations");
+    if (!pickup || !destination || !pickupDateTime || !dropDate) {
+        alert("Please enter all required fields");
+        return;
+    }
+
+    // Calculate number of days for the trip
+    const startDate = new Date(pickupDateTime);
+    const endDate = new Date(dropDate);
+
+    // Calculate the difference in days (add 1 because both pickup and drop dates count as days)
+    const diffTime = Math.abs(endDate - startDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    if (diffDays < 1) {
+        alert("Invalid date selection. The drop date should be on or after the pickup date.");
         return;
     }
 
@@ -1133,33 +1227,46 @@ function calculateRoute() {
                     const minutes = Math.floor((totalDuration % 3600) / 60);
                     const durationText = `${hours > 0 ? hours + ' hr ' : ''}${minutes} min`;
 
-                    // Calculate fare based on selected vehicle
+                    // Vehicle rates per km and day rent
                     let ratePerKm = 13; // Default rate (Hatchback)
+                    let dayRent = 1700; // Default day rent for Hatchback
+                    let vehicleType = "Hatchback";
 
                     // Get selected vehicle type
                     if (document.getElementById('sedan').checked) {
                         ratePerKm = 14;
+                        dayRent = 1800;
+                        vehicleType = "Sedan";
                     } else if (document.getElementById('ertiga').checked) {
                         ratePerKm = 18;
+                        dayRent = 2300;
+                        vehicleType = "Ertiga/Rumion";
                     } else if (document.getElementById('crysta').checked) {
                         ratePerKm = 20;
+                        dayRent = 2500;
+                        vehicleType = "Innova";
                     }
 
-                    const estimatedFare = Math.round(totalDistanceKm * ratePerKm);
+                    // Calculate fare based on distance and days
+                    const distanceCost = Math.round(totalDistanceKm * ratePerKm);
+                    const dayCost = dayRent * diffDays;
+                    const estimatedFare = distanceCost + dayCost;
 
                     // Display route details
                     resultHtml += `
                     <div class="row">
                         <div class="col-md-6">
                             <div style="background-color: #fff3cd; border-left: 5px solid #ffecb5; padding: 15px; border-radius: 4px;">
-                            <strong><em>Note:</em></strong> <em>The actual bill may vary based on the number of days you stay at intermediate locations, driver's allowance, actual distance traveled, waiting time, night charges, hill station charges, and inter-state permits.</em>
+                                <strong><em>Note:</em></strong> <em>The actual bill may vary based on additional kilometers traveled, waiting time, night charges, hill station charges, and inter-state permits.</em>
+                            </div>
                         </div>
-                    </div>
 
                         <div class="col-md-6">
                             <p><strong>Total Distance:</strong> <span id="total-distance">${totalDistanceText}</span> (includes return)</p>
+                            <p><strong>Number of Days:</strong> <span id="total-days">${diffDays}</span></p>
 
                             <p><strong>Estimated Fare:</strong> <span id="fare-estimation">₹${estimatedFare}</span></p>
+                            <p class="text-muted"><small>Additional day: ₹${dayRent} | Additional km: ₹${ratePerKm}/km</small></p>
                         </div>
                     </div>`;
 
@@ -1226,15 +1333,27 @@ function calculateRoute() {
                     <div class="mt-3">
                         <h5>Journey Summary</h5>
                         <ul>
-                            <li>Total journey includes ${waypoints.length} intermediate stops</li>
+                            <li>Package trip with ${vehicleType} for ${diffDays} day${diffDays > 1 ? 's' : ''}</li>
+                            <li>Trip includes ${waypoints.length} intermediate stop${waypoints.length !== 1 ? 's' : ''}</li>
                             <li>Return journey is included in the fare calculation</li>
                             <li>Total travel time may vary based on traffic conditions</li>
                         </ul>
                     </div>`;
 
-
                     document.getElementById("results").innerHTML = resultHtml;
                     document.getElementById("results").style.display = "block";
+
+                    // Show the "Book Now" button
+                    if (!document.getElementById("book-now")) {
+                        const bookButtonDiv = document.createElement("div");
+                        bookButtonDiv.className = "text-center mt-3";
+                        bookButtonDiv.innerHTML = `
+                            <button id="book-now" class="btn btn-calculate me-md-2">
+                                <i class="bi bi-calendar-plus me-2"></i>Book Now
+                            </button>
+                        `;
+                        document.getElementById("results").after(bookButtonDiv);
+                    }
                 } else {
                     alert("Could not calculate return directions: " + returnStatus);
                 }
@@ -1244,6 +1363,7 @@ function calculateRoute() {
         }
     });
 }
+
       // Reset the form
       function resetForm() {
           document.getElementById("pickup").value = "";
