@@ -1,3 +1,8 @@
+
+
+
+
+
 /**
  * Mayil Taxi Booking System
  * Enhanced script with improved security, error handling, and user experience
@@ -451,6 +456,8 @@ function validatePhone(phone) {
 // Calculate fare based on trip type, vehicle type and distance
 function calculateFare() {
 
+
+
   // Add this to your calculateFare function, just before the end -
 // right after you display the results but before the closing bracket
 
@@ -500,6 +507,9 @@ if (additionalKmNote) {
         if (dropoffError) dropoffError.textContent = 'Drop location is required';
         return;
     }
+
+
+
 
     // Show loading state on the calculate button
     const calculateButton = document.getElementById('calculate');
