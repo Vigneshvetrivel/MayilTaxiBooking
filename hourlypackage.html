@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mayil Taxi - Hourly Package</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="1.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="floating-icons.css">
+    <style>
+        :root {
+            --primary: #ffbf00;
+            --secondary: #212529;
+            --light-gray: #f8f9fa;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        .navbar-brand img {
+            max-height: 50px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .logo-container img {
+            max-height: 250px;
+        }
+
+        .content-container {
+            padding: 15px;
+            width: 100%; /* Use 100% instead of calculating with negative margins */
+            border-radius: 0;
+            overflow-x: auto; /* Add horizontal scrolling for tables */
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 50px 0 20px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Table container to allow scrolling */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* If you have a container inside the footer, add this to ensure content stays centered */
+        .footer .container {
+            max-width: 1140px;
+            margin: 0 auto;
+        }
+
+        .footer h5 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-social .btn {
+            background-color: #343a40;
+            color: white;
+            margin-right: 5px;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-social .btn:hover {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+
+        .footer-contact li {
+            margin-bottom: 15px;
+        }
+
+        .footer-contact .icon {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .footer-links a {
+            color: #dee2e6;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #adb5bd;
+        }
+
+        .navbar-links .nav-link {
+            color: #dee2e6;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .navbar-links .nav-link:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .navbar-links .nav-item {
+            margin: 0 10px;
+        }
+
+        .navbar .bi-chevron-right {
+            color: var(--primary);
+        }
+
+        .floating-icons {
+            position: fixed;
+            top: 30%;
+            right: 5%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .floating-icons .icon {
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            padding: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .floating-icons .icon img {
+            width: 30px;  /* Smaller icon size */
+            height: 30px;
+        }
+
+        .floating-icons .icon:hover {
+            transform: scale(1.2) translateX(-10px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 767.98px) {
+            .content-container {
+                padding: 20px;
+            }
+
+            .footer-section {
+                margin-bottom: 30px;
+            }
+
+            /* Improve table display on mobile */
+            .package-table {
+                min-width: 600px; /* Force minimum width for better scrolling */
+            }
+        }
+        /* Custom styles for hourly package page */
+       .package-tabs {
+           margin-bottom: 30px;
+           display: flex;
+           flex-wrap: wrap;
+           gap: 10px;
+           justify-content: center;
+       }
+
+       .package-tab {
+           padding: 15px 30px;
+           font-size: 18px;
+           font-weight: bold;
+           border: none;
+           cursor: pointer;
+           transition: all 0.3s;
+           border-radius:15px;
+       }
+
+       .package-tab.active {
+           background-color: #ffbf00;
+           color: white;
+       }
+
+       .package-tab:not(.active) {
+           background-color: #f1f1f1;
+           color: #333;
+       }
+
+       .package-header {
+           text-align: center;
+           font-size: 24px;
+           margin-bottom: 20px;
+           color: #333;
+           font-weight: bold;
+       }
+
+       .package-table {
+           width: 100%;
+           border-collapse: collapse;
+           margin-bottom: 30px;
+       }
+
+       .package-table th {
+           background-color: #212529;
+           color: white;
+           text-align: left;
+           padding: 12px 15px;
+       }
+
+       .package-table tr:nth-child(even) {
+           background-color: #f3f3f3;
+       }
+
+       .package-table tr:hover {
+           background-color: #e0e0e0;
+       }
+
+       .package-table td {
+           padding: 12px 15px;
+           border-bottom: 1px solid #ddd;
+       }
+
+       .book-button {
+           background-color: #ffbf00;
+           color: black;
+           border-none;
+           padding: 8px 15px;
+           border-radius: 15px;
+           cursor: pointer;
+           font-weight: bold;
+           transition: background-color 0.3s;
+       }
+
+       .book-button:hover {
+           background-color: #dc3545;
+       }
+
+       /* Modal styles */
+       .modal {
+           display: none;
+           position: fixed;
+           z-index: 2000;
+           left: 0;
+           top: 0;
+           width: 100%;
+           height: 100%;
+           overflow: auto;
+           background-color: rgba(0,0,0,0.4);
+       }
+
+       .modal-content {
+           background-color: #fefefe;
+           margin: 10% auto;
+           padding: 20px;
+           border: 1px solid #888;
+           width: 80%;
+           max-width: 500px;
+           border-radius: 8px;
+           box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+       }
+
+       .close-modal {
+           color: #aaa;
+           float: right;
+           font-size: 28px;
+           font-weight: bold;
+           cursor: pointer;
+       }
+
+       .close-modal:hover {
+           color: black;
+       }
+
+       .form-group {
+           margin-bottom: 15px;
+       }
+
+       .form-group label {
+           display: block;
+           margin-bottom: 5px;
+           font-weight: bold;
+       }
+
+       .form-group input, .form-group select {
+           width: 100%;
+           padding: 10px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+           box-sizing: border-box;
+       }
+
+       .submit-button {
+           background-color: #ffbf00;
+           color: #212529;
+           border: none;
+           padding: 10px 20px;
+           border-radius: 4px;
+           cursor: pointer;
+           font-weight: bold;
+           width: 100%;
+           margin-top: 10px;
+       }
+
+       .submit-button:hover {
+           background-color: #e6ac00;
+       }
+
+       .success-message {
+           color: #28a745;
+           text-align: center;
+           display: none;
+           margin-top: 15px;
+       }
+
+       .error-message {
+           color: #dc3545;
+           text-align: center;
+           display: none;
+           margin-top: 15px;
+       }
+       .notes-container {
+     background-color: #f9f9f9;
+     border-left: 4px solid #4a90e2;
+     border-radius: 4px;
+     padding: 16px 20px;
+     margin: 20px 0;
+     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+     font-family: Arial, sans-serif;
+   }
+
+   .notes-header {
+     font-size: 16px;
+     font-weight: bold;
+     color: #333;
+     margin-bottom: 12px;
+     display: flex;
+     align-items: center;
+   }
+
+   .notes-header:before {
+     content: "ℹ️";
+     margin-right: 8px;
+     font-size: 18px;
+   }
+
+   .notes-list {
+     list-style-type: none;
+     padding-left: 0;
+     margin: 0;
+   }
+
+   .notes-list li {
+     padding: 6px 0 6px 24px;
+     position: relative;
+     line-height: 1.5;
+     color: #555;
+   }
+
+   .notes-list li:before {
+     content: "•";
+     position: absolute;
+     left: 8px;
+     color: #4a90e2;
+     font-weight: bold;
+   }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="Mayiltaxifont.png" alt="Mayil Taxi Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto navbar-links">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="bi bi-chevron-right me-2"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="service.html"><i class="bi bi-chevron-right me-2"></i>Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="hourlypackage.html"><i class="bi bi-chevron-right me-2"></i>Hourly Package</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- LOGO -->
+    <div class="container mt-4">
+        <div class="logo-container">
+            <img src="1.png" alt="Mayil Taxi Logo" class="img-fluid">
+        </div>
+
+        <!-- Content Container with scrollable content -->
+        <div class="content-container">
+            <div class="package-tabs">
+                <button class="package-tab active" id="tab-10hrs">10 Hrs</button>
+                <button class="package-tab" id="tab-8hrs">8 Hrs</button>
+            </div>
+
+            <div id="package-10hrs" class="package-content">
+                <h2 class="package-header">Coimbatore City Local — 10 Hrs (Free 100Km)</h2>
+                <div class="table-responsive">
+                    <table class="package-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicles</th>
+                                <th>Total Amount</th>
+                                <th>Fare / Hr (Extra Hrs)</th>
+                                <th>Fare / Hr (After Free Kms)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SWIFT DZIRE A/C (Sedan)</td>
+                                <td>Rs. 2,650</td>
+                                <td>Rs. 250</td>
+                                <td>Rs. 13</td>
+                                <td><button class="book-button" data-vehicle="SWIFT DZIRE A/C (Sedan)" data-package="10 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>TOYOTA Etios A/C (Sedan)</td>
+                                <td>Rs. 2,650</td>
+                                <td>Rs. 250</td>
+                                <td>Rs. 13</td>
+                                <td><button class="book-button" data-vehicle="TOYOTA Etios A/C (Sedan)" data-package="10 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>VERITO AC</td>
+                                <td>Rs. 2,650</td>
+                                <td>Rs. 250</td>
+                                <td>Rs. 13</td>
+                                <td><button class="book-button" data-vehicle="VERITO AC" data-package="10 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>MAHINDRA XYLO</td>
+                                <td>Rs. 3,600</td>
+                                <td>Rs. 300</td>
+                                <td>Rs. 15</td>
+                                <td><button class="book-button" data-vehicle="MAHINDRA XYLO" data-package="10 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>INNOVA A/C</td>
+                                <td>Rs. 3,600</td>
+                                <td>Rs. 300</td>
+                                <td>Rs. 15</td>
+                                <td><button class="book-button" data-vehicle="INNOVA A/C" data-package="10 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>INNOVA CRYSTA (Innova Crysta)</td>
+                                <td>Rs. 5,000</td>
+                                <td>Rs. 500</td>
+                                <td>Rs. 17</td>
+                                <td><button class="book-button" data-vehicle="INNOVA CRYSTA (Innova Crysta)" data-package="10 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>Traveller A/C 14-seater (Mini van)</td>
+                                <td>Rs. 5,200</td>
+                                <td>Rs. 500</td>
+                                <td>Rs. 19</td>
+                                <td><button class="book-button" data-vehicle="Traveller A/C 14-seater (Mini van)" data-package="10 Hrs">Book Now</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="package-8hrs" class="package-content" style="display: none;">
+                <h2 class="package-header">Coimbatore City Local — 8 Hrs (Free 80Km)</h2>
+                <div class="table-responsive">
+                    <table class="package-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicles</th>
+                                <th>Total Amount</th>
+                                <th>Fare / Hr (Extra Hrs)</th>
+                                <th>Fare / Hr (After Free Kms)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SWIFT DZIRE A/C (Sedan)</td>
+                                <td>Rs. 2,450</td>
+                                <td>Rs. 250</td>
+                                <td>Rs. 13</td>
+                                <td><button class="book-button" data-vehicle="SWIFT DZIRE A/C (Sedan)" data-package="8 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>TOYOTA Etios A/C (Sedan)</td>
+                                <td>Rs. 2,450</td>
+                                <td>Rs. 250</td>
+                                <td>Rs. 13</td>
+                                <td><button class="book-button" data-vehicle="TOYOTA Etios A/C (Sedan)" data-package="8 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>VERITO AC</td>
+                                <td>Rs. 2,450</td>
+                                <td>Rs. 250</td>
+                                <td>Rs. 13</td>
+                                <td><button class="book-button" data-vehicle="VERITO AC" data-package="8 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>MAHINDRA XYLO</td>
+                                <td>Rs. 3,500</td>
+                                <td>Rs. 300</td>
+                                <td>Rs. 15</td>
+                                <td><button class="book-button" data-vehicle="MAHINDRA XYLO" data-package="8 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>INNOVA A/C</td>
+                                <td>Rs. 3,500</td>
+                                <td>Rs. 300</td>
+                                <td>Rs. 15</td>
+                                <td><button class="book-button" data-vehicle="INNOVA A/C" data-package="8 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>INNOVA CRYSTA (Innova Crysta)</td>
+                                <td>Rs. 4,500</td>
+                                <td>Rs. 500</td>
+                                <td>Rs. 18</td>
+                                <td><button class="book-button" data-vehicle="INNOVA CRYSTA (Innova Crysta)" data-package="8 Hrs">Book Now</button></td>
+                            </tr>
+                            <tr>
+                                <td>Traveller A/C 14-seater (Mini van)</td>
+                                <td>Rs. 4,800</td>
+                                <td>Rs. 500</td>
+                                <td>Rs. 19</td>
+                                <td><button class="book-button" data-vehicle="Traveller A/C 14-seater (Mini van)" data-package="8 Hrs">Book Now</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="notes-container">
+               <div class="notes-header">Important Notes</div>
+               <ul class="notes-list">
+                 <li>Excluding Parking and Toll charges.</li>
+                 <li>Total Km and Time will be calculated from office to office.</li>
+                 <li>Driver Allowance will be extra if the driver drives after 10:00 pm and before 6:00 am.</li>
+               </ul>
+             </div>
+            <!-- Booking Modal -->
+            <div id="booking-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Book Your Taxi</h2>
+                    <div id="booking-form">
+                        <form id="taxi-booking-form">
+                            <input type="hidden" id="vehicle-type" name="vehicle-type">
+                            <input type="hidden" id="package-type" name="package-type">
+
+                            <div class="form-group">
+                                <label for="customer-name">Your Name</label>
+                                <input type="text" id="customer-name" name="customer-name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone-number">Phone Number</label>
+                                <input type="tel" id="phone-number" name="phone-number" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pickup-location">Pickup Location</label>
+                                <input type="text" id="pickup-location" name="pickup-location" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pickup-date">Pickup Date</label>
+                                <input type="date" id="pickup-date" name="pickup-date" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pickup-time">Pickup Time</label>
+                                <input type="time" id="pickup-time" name="pickup-time" required>
+                            </div>
+
+                            <button type="submit" class="submit-button">Submit Booking</button>
+                        </form>
+
+                        <div id="success-message" class="success-message">
+                            Thank you for your booking! We will contact you shortly.
+                        </div>
+
+                        <div id="error-message" class="error-message">
+                            There was an error submitting your booking. Please try again later.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>About Mayil Taxi</h5>
+                    <p>Mayil Taxi provides comfortable and reliable taxi services in Coimbatore and across Tamil Nadu. We specialize in both one-way drop and multi-day round trip services.</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/919488840240" class="btn rounded-circle" title="WhatsApp" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        <a href="mailto:mayiltaxi@gmail.com" class="btn rounded-circle" title="Email">
+                            <i class="bi bi-envelope"></i>
+                        </a>
+                        <a href="https://maps.app.goo.gl/?q=5A+KRISHNA+SWAMINAGAR+CHINNAMAL+LAYOUT+KK+PUDUR+COIMBATORE+38" class="btn rounded-circle" title="Location" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-geo-alt"></i>
+                        </a>
+                        <a href="https://www.instagram.com/mayiltaxi/" class="btn rounded-circle" title="Instagram" target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled footer-contact">
+                        <li>
+                            <i class="bi bi-telephone-fill icon"></i>
+                            <span>94888 40240</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-envelope-fill icon"></i>
+                            <span>mayiltaxi@gmail.com</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-geo-alt-fill icon"></i>
+                            <span>MADURAI & COIMBATORE</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="index.html"><i class="bi bi-chevron-right me-2"></i>Home</a></li>
+                        <li><a href="service.html"><i class="bi bi-chevron-right me-2"></i>Services</a></li>
+                        <li><a href="hourlypackage.html"><i class="bi bi-chevron-right me-2"></i>Hourly Package</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mayil Taxi. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Social Icons -->
+    <div class="floating-icons-container">
+        <div class="toggle-icons" id="toggleIcons">
+            ☰
+        </div>
+        <div class="icons-wrapper" id="iconsWrapper">
+            <a href="https://wa.me/919488840240" target="_blank" class="icon whatsapp" data-title="WhatsApp">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png" alt="WhatsApp">
+            </a>
+            <a href="https://www.instagram.com/mayiltaxi/" target="_blank" class="icon instagram" data-title="Instagram">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/instagram-new.png" alt="Instagram">
+            </a>
+            <a href="tel:+919488840240" class="icon call" data-title="Call">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png" alt="Call">
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Tab switching functionality
+        document.getElementById('tab-10hrs').addEventListener('click', function() {
+            document.getElementById('tab-10hrs').classList.add('active');
+            document.getElementById('tab-8hrs').classList.remove('active');
+            document.getElementById('package-10hrs').style.display = 'block';
+            document.getElementById('package-8hrs').style.display = 'none';
+        });
+
+        document.getElementById('tab-8hrs').addEventListener('click', function() {
+            document.getElementById('tab-8hrs').classList.add('active');
+            document.getElementById('tab-10hrs').classList.remove('active');
+            document.getElementById('package-8hrs').style.display = 'block';
+            document.getElementById('package-10hrs').style.display = 'none';
+        });
+
+        // Modal functionality
+        var modal = document.getElementById('booking-modal');
+        var closeBtn = document.getElementsByClassName('close-modal')[0];
+
+        // When the user clicks on the book now button, open the modal
+        var bookButtons = document.getElementsByClassName('book-button');
+        for (var i = 0; i < bookButtons.length; i++) {
+            bookButtons[i].addEventListener('click', function() {
+                modal.style.display = 'block';
+
+                // Set the hidden fields with the vehicle and package info
+                document.getElementById('vehicle-type').value = this.getAttribute('data-vehicle');
+                document.getElementById('package-type').value = this.getAttribute('data-package');
+
+                // Reset form and messages
+                document.getElementById('taxi-booking-form').reset();
+                document.getElementById('success-message').style.display = 'none';
+                document.getElementById('error-message').style.display = 'none';
+            });
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Form submission
+        document.getElementById('taxi-booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            var vehicle = document.getElementById('vehicle-type').value;
+            var package = document.getElementById('package-type').value;
+            var name = document.getElementById('customer-name').value;
+            var phone = document.getElementById('phone-number').value;
+            var location = document.getElementById('pickup-location').value;
+            var date = document.getElementById('pickup-date').value;
+            var time = document.getElementById('pickup-time').value;
+
+            // Send data to Google Sheet
+            var formData = new FormData();
+            formData.append('vehicle', vehicle);
+            formData.append('package', package);
+            formData.append('name', name);
+            formData.append('phone', phone);
+            formData.append('location', location);
+            formData.append('date', date);
+            formData.append('time', time);
+
+            // Replace with your Google Apps Script Web App URL
+            var scriptURL = 'https://script.google.com/macros/s/AKfycbzaoziwhg1QZSPKTLLnFkGBge7o11_pCD_kWfP51WrPgWIuqhfP09rVhuXOKcHOBmVfQw/exec';
+
+            // For demonstration purposes, we'll show success message
+            // In a real implementation, you would send the data to your Google Script
+            document.getElementById('success-message').style.display = 'block';
+            document.getElementById('taxi-booking-form').style.display = 'none';
+
+            // Uncomment this section when you have your Google Script URL
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => {
+                    document.getElementById('success-message').style.display = 'block';
+                    document.getElementById('taxi-booking-form').style.display = 'none';
+
+                    // Reset form after 3 seconds and close modal
+                    setTimeout(function() {
+                        document.getElementById('taxi-booking-form').reset();
+                        document.getElementById('success-message').style.display = 'none';
+                        document.getElementById('taxi-booking-form').style.display = 'block';
+                        modal.style.display = 'none';
+                    }, 3000);
+                })
+                .catch(error => {
+                    document.getElementById('error-message').style.display = 'block';
+                    console.error('Error!', error.message);
+                });
+        });
+    </script>
+    <!-- Floating icons script -->
+    <script src="floating-icons.js"></script>
+</body>
+</html>

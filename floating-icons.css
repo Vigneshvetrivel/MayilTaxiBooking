@@ -1,0 +1,131 @@
+/* floating-icons.css */
+
+/* Floating Icons Container */
+.floating-icons-container {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+
+/* Toggle button */
+.toggle-icons {
+    background-color: #ffbf00;
+    color: black;
+    width: 40px;
+    height: 40px;
+    border-radius: 50% 0 0 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.toggle-icons:hover {
+    background-color: #023e8a;
+}
+
+/* Icons wrapper */
+.icons-wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px 0 0 10px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    padding: 10px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.icons-wrapper.active {
+    transform: translateX(0);
+}
+
+/* Individual icons */
+.icon {
+    margin: 8px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.icon:hover {
+    transform: scale(1.1);
+}
+
+.icon img {
+    width: 24px;
+    height: 24px;
+}
+
+.whatsapp {
+    background-color: #25D366;
+}
+
+.instagram {
+    background-color: #E1306C;
+}
+
+.call {
+    background-color: #007BFF;
+}
+
+/* Tooltip styles */
+.icon {
+    position: relative;
+}
+
+.icon::after {
+    content: attr(data-title);
+    position: absolute;
+    left: -80px;
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.icon:hover::after {
+    opacity: 1;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .floating-icons-container {
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        transform: none;
+    }
+
+    .toggle-icons {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+    }
+
+    .icons-wrapper {
+        position: absolute;
+        bottom: 60px;
+        right: 0;
+        border-radius: 10px;
+        transform: scale(0);
+        transform-origin: bottom right;
+    }
+
+    .icons-wrapper.active {
+        transform: scale(1);
+    }
+}
